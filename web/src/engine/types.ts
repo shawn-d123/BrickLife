@@ -96,7 +96,11 @@ export interface EventChoice {
 
 export type EventKind =
   | "rent_increase" | "buy_opportunity" | "rate_change"
-  | "household" | "employment" | "mortgage_reset";
+  | "household" | "employment" | "mortgage_reset"
+  // [C] extension, agreed at merge: renters were seeing four events to an
+  // owner's six, two of them the same rent rise. This is the renter's own
+  // pressure beat, so every year has two decisions whatever your tenure.
+  | "landlord_sells";
 
 export type NpcId = "landlord" | "estate_agent" | "bank" | "partner" | "employer";
 

@@ -98,8 +98,12 @@ const rentIncrease = (year: number, stream: number): Beat => ({
   kind: "rent_increase",
   npc: "landlord",
   stream,
-  gate: (ctx) => ctx.state.tenure === "renting",
+  // Complement of landlordSells on the same year and stream: identical rng, so
+  // exactly one of the two fires and the renter always gets a second decision.
+  gate: ({ state, rng }) => state.tenure === "renting" && rng() >= 0.5,
   build: ({ state, rng }) => {
+    // The gate consumed the first draw, so the hike comes off the next one.
+    rng();
     const hike = range(rng, 0.05, 0.14);
     const newRent = round(state.rentMonthly * (1 + hike), 5);
     const cheaper = allBoroughs()
@@ -145,16 +149,18 @@ const rentIncrease = (year: number, stream: number): Beat => ({
   },
 });
 
-const buyOpportunity: Beat = {
-  year: 2026,
+/**
+ * The agent calls. Parameterised by year so a renter gets more than one shot at
+ * this: gating it on "only if you said you would look" meant that signing the
+ * 2026 tenancy closed home ownership for the whole game, which is both harsh
+ * and the reason so many runs collapsed to the same four events.
+ */
+const buyOpportunity = (year: number, stream: number): Beat => ({
+  year,
   kind: "buy_opportunity",
   npc: "estate_agent",
-  stream: 2,
-  // Only fires if they did not just sign a new tenancy, and only while renting.
-  gate: ({ state, log }) => {
-    const last = lastDecision(log);
-    return state.tenure === "renting" && !!last && (last.kind === "wait" || last.kind === "move");
-  },
+  stream,
+  gate: ({ state }) => state.tenure === "renting",
   build: ({ state, rng, scenario }) => {
     const home = boroughFacts(state.borough);
     // A first flat sits well below the borough average, which is dragged up by
@@ -214,10 +220,10 @@ const buyOpportunity: Beat = {
     });
 
     return {
-      id: "buy_opportunity_2026",
+      id: "buy_opportunity_" + year,
       kind: "buy_opportunity",
       npc: "estate_agent",
-      year: 2026,
+      year,
       headline: copy.headline,
       body: copy.body,
       facts,
@@ -225,13 +231,14 @@ const buyOpportunity: Beat = {
       detail: { price, deposit, stampDuty: duty, budget, newRate: rate, newMonthly: monthly },
     };
   },
-};
+});
 
-const rateChange: Beat = {
-  year: 2027,
+/** Parameterised by year: rates move under a scenario every year, not once. */
+const rateChange = (year: number, stream: number): Beat => ({
+  year,
   kind: "rate_change",
   npc: "bank",
-  stream: 1,
+  stream,
   gate: ({ state }) => state.tenure === "owning" && state.mortgage !== null,
   build: ({ state, scenario }) => {
     const m = state.mortgage as NonNullable<YearState["mortgage"]>;
@@ -267,10 +274,10 @@ const rateChange: Beat = {
     ];
 
     return {
-      id: "rate_change_2027",
+      id: "rate_change_" + year,
       kind: "rate_change",
       npc: "bank",
-      year: 2027,
+      year,
       headline: copy.headline,
       body: copy.body,
       facts,
@@ -278,7 +285,7 @@ const rateChange: Beat = {
       detail: { oldRate: m.ratePct, newRate, oldMonthly: m.monthly, newMonthly },
     };
   },
-};
+});
 
 const household: Beat = {
   year: 2028,
@@ -431,14 +438,106 @@ const mortgageReset: Beat = {
  * 2027 has two mutually exclusive beats: owners hear from the bank, renters
  * get another letter from the landlord.
  */
+
+/**
+ * The other thing that happens to renters: the landlord decides to sell, and
+ * you are out whatever you wanted. Two months' notice, a deposit you will not
+ * see for weeks, and moving costs.
+ *
+ * Paired with `rentIncrease` on the same year and stream so their gates are
+ * exact complements: the same rng draw decides which of the two a given seed
+ * gets, so 2027 and 2028 each swing between a rent rise and a notice to quit.
+ */
+const landlordSells = (year: number, stream: number): Beat => ({
+  year,
+  kind: "landlord_sells",
+  npc: "landlord",
+  stream,
+  gate: ({ state, rng }) => state.tenure === "renting" && rng() < 0.5,
+  build: ({ state, rng }) => {
+    const options = allBoroughs()
+      .filter((b) => b.code !== state.borough)
+      .sort((a, b) => a.avgRent - b.avgRent);
+    const cheaper = options[0];
+    const similar =
+      options.find((b) => b.avgRent >= state.rentMonthly * 0.95) ?? options[options.length - 1];
+    const cheapRent = round(cheaper.avgRent * 0.86, 5);
+    const similarRent = round(similar.avgRent * 0.86, 5);
+    // Staying put means taking whatever the new owner asks, which is more.
+    const stayRent = round(state.rentMonthly * (1 + range(rng, 0.1, 0.2)), 5);
+
+    const copy = copyFor("landlord_sells", {
+      headline: "Your landlord is selling the flat",
+      body: "Two months' notice. The estate agent will be round on Saturday with a camera.",
+    });
+
+    const facts: EventFact[] = [
+      { label: "Notice", value: "Two months" },
+      { label: "Your rent now", value: gbp(state.rentMonthly) + "/mo" },
+      { label: "Stay on with the buyer", before: gbp(state.rentMonthly) + "/mo", after: gbp(stayRent) + "/mo" },
+      { label: "Cheapest move", value: cheaper.name + ", about " + gbp(cheapRent) + "/mo" },
+      { label: "Like for like", value: similar.name + ", about " + gbp(similarRent) + "/mo" },
+      { label: "Moving costs", value: gbp(MOVING_COST) },
+    ];
+
+    const choices: EventChoice[] = [
+      { kind: "move", label: "Move to " + cheaper.name + " for " + gbp(cheapRent), borough: cheaper.code },
+      { kind: "move", label: "Move to " + similar.name + " for " + gbp(similarRent), borough: similar.code },
+      { kind: "accept_rent", label: "Stay on with the new owner at " + gbp(stayRent) },
+    ];
+
+    return {
+      id: "landlord_sells_" + year,
+      kind: "landlord_sells",
+      npc: "landlord",
+      year,
+      headline: copy.headline,
+      body: copy.body,
+      facts,
+      choices,
+      detail: {
+        oldRent: state.rentMonthly,
+        newRent: stayRent,
+        moveBorough: cheaper.code,
+        moveRent: cheapRent,
+      },
+    };
+  },
+});
+
+/**
+ * Two decisions a year, whatever your tenure.
+ *
+ * Before this, an owner saw six events and a renter saw four -- and two of the
+ * renter's four were the same rent rise, so every renting run played out
+ * identically. Renters now get their own pressure beat and a second and third
+ * shot at buying, and the rent-rise / notice-to-quit pair swings on the seed.
+ *
+ * Order matters: sim.ts walks this array once, so years must ascend.
+ */
 export const SCHEDULE: Beat[] = [
+  // 2026 — the opener, and the agent's first call
   rentIncrease(2026, 1),
-  buyOpportunity,
-  rateChange,
+  landlordSells(2026, 1),
+  buyOpportunity(2026, 2),
+
+  // 2027 — the lender writes if you own; the market leans on you if you rent
+  rateChange(2027, 1),
   rentIncrease(2027, 3),
+  landlordSells(2027, 3),
+  buyOpportunity(2027, 4),
+
+  // 2028 — the household question; the lender writes again if you own, and the
+  //        market turns the screw again if you rent
   household,
+  rateChange(2028, 7),
+  rentIncrease(2028, 5),
+  landlordSells(2028, 5),
+
+  // 2029 — the job, then the endgame: reset the mortgage or take a last shot
   employment,
   mortgageReset,
+  buyOpportunity(2029, 6),
 ];
 
 function beatContext(

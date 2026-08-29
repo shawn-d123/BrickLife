@@ -1,109 +1,216 @@
-/**
- * THROWAWAY HARNESS — owned by [C], delete or replace freely.
- *
- * Written by [B] for two reasons:
- *  1. it proves the engine runs in the browser bundle, not just in Node;
- *  2. it is the integration from 00-CONTRACTS.md section 3, working, so C can
- *     copy the six lines that matter and throw the rest away.
- *
- * The six lines that matter are the useState block and `choose`. That is the
- * whole engine integration. Everything else here is scaffolding.
- */
+import { useCallback, useMemo, useState } from "react";
+import "./styles.css";
 
-import { useState } from "react";
-import {
-  counterfactual,
-  drawScenarioPath,
-  gbp,
-  isStub,
-  simulate,
-} from "../engine/index.ts";
-import type { Decision, GameEvent } from "../engine/index.ts";
+import { drawScenarioPath, simulate, rollCircumstances } from "./wiring";
+import type { Decision, ScenarioId } from "./wiring";
+
+import { Hud } from "./components/Hud";
+import { Room } from "./components/Room";
+import type { Beat } from "./components/Room";
+import { DecisionCard } from "./components/DecisionCard";
+import type { Choice } from "./components/DecisionCard";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+
+import { TitleScene } from "./scenes/TitleScene";
+import { CharacterScene } from "./scenes/CharacterScene";
+import { LotteryScene } from "./scenes/LotteryScene";
+import { PremiseScene } from "./scenes/PremiseScene";
+import { OutlookScene } from "./scenes/OutlookScene";
+import { ScenarioScene } from "./scenes/ScenarioScene";
+import { SummaryScene } from "./scenes/SummaryScene";
+import { CounterfactualScene } from "./scenes/CounterfactualScene";
+import { WhatsRealScene } from "./scenes/WhatsRealScene";
+
+type Screen =
+  | "title" | "character" | "lottery" | "premise"
+  | "play" | "outlook" | "scenario" | "summary" | "counterfactual" | "about";
+
+/**
+ * Demo safety. `?seed=12345` pins the run so a rehearsed playthrough is
+ * reproducible on the projector; without it every load is a fresh life.
+ * The seed is the only entropy in the whole app -- everything downstream is a
+ * pure function of it, so pinning it pins the entire five years.
+ */
+function seedFromUrl(): number | null {
+  if (typeof window === "undefined") return null;
+  const raw = new URLSearchParams(window.location.search).get("seed");
+  if (!raw) return null;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n >>> 0 : null;
+}
 
 export default function App() {
-  // Seed is drawn OUTSIDE the engine — the engine itself never calls Date.now.
-  const [seed] = useState(() => Date.now() >>> 0);
-  const [path] = useState(() => drawScenarioPath(seed));
+  return (
+    <div className="app">
+      <div className="stage">
+        <ErrorBoundary>
+          <Game />
+        </ErrorBoundary>
+      </div>
+    </div>
+  );
+}
+
+function Game() {
+  // Nothing derived lives in state. Only the seed, the future, and the choices.
+  const [seed, setSeed] = useState(() => seedFromUrl() ?? (Date.now() >>> 0));
+  const [path, setPath] = useState<ScenarioId[]>(() => drawScenarioPath(seed));
   const [decisions, setDecisions] = useState<Decision[]>([]);
 
-  const run = simulate(seed, path, decisions); // recompute every render, it's cheap
+  const [screen, setScreen] = useState<Screen>("title");
+  const [beforeAbout, setBeforeAbout] = useState<Screen>("title");
+  const [name, setName] = useState("You");
+  const [spriteId, setSpriteId] = useState<0 | 1 | 2>(0);
+  const [beat, setBeat] = useState<Beat>("idle");
+  const [seenYear, setSeenYear] = useState(2026);
+  const [sound, setSound] = useState(true);
 
-  function choose(choice: GameEvent["choices"][number]) {
+  // Recomputed every render. It is a pure function over five years, it costs nothing.
+  const run = useMemo(() => simulate(seed, path, decisions), [seed, path, decisions]);
+  const circ = useMemo(() => rollCircumstances(seed), [seed]);
+
+  const choose = useCallback((c: Choice) => {
     setDecisions((ds) => [
       ...ds,
-      {
-        year: run.current.year,
-        kind: choice.kind,
-        borough: choice.borough,
-        price: choice.price,
-      },
+      { year: run.current.year, kind: c.kind, borough: c.borough, price: c.price },
     ]);
+    setBeat("idle");
+  }, [run.current.year]);
+
+  function newLife() {
+    // A pinned seed stays pinned across "new life" so a rehearsal repeats exactly.
+    const s = seedFromUrl() ?? (Date.now() >>> 0);
+    setSeed(s);
+    setPath(drawScenarioPath(s));
+    setDecisions([]);
+    setSeenYear(2026);
+    setBeat("idle");
+    setScreen("character");
   }
 
-  const c = run.circumstances;
-  const ifWaited = run.finished
-    ? counterfactual(seed, path, decisions, (d) =>
-        d.kind === "buy" ? { ...d, kind: "wait" } : d,
-      )
-    : null;
+  function openAbout() {
+    setBeforeAbout(screen);
+    setScreen("about");
+  }
+
+  // ---- non-play screens -------------------------------------------------
+
+  if (screen === "about") {
+    return <WhatsRealScene onBack={() => setScreen(beforeAbout)} />;
+  }
+  if (screen === "title") {
+    return <TitleScene onStart={newLife} onAbout={openAbout} />;
+  }
+  if (screen === "character") {
+    return (
+      <CharacterScene
+        onDone={(n, sid) => { setName(n); setSpriteId(sid); setScreen("lottery"); }}
+      />
+    );
+  }
+  if (screen === "lottery") {
+    return <LotteryScene circ={circ} name={name} onDone={() => setScreen("premise")} />;
+  }
+  if (screen === "premise") {
+    return <PremiseScene onBegin={() => setScreen("play")} />;
+  }
+  if (screen === "outlook") {
+    return (
+      <OutlookScene
+        st={run.current}
+        onBack={() => setScreen("play")}
+        onBuy={(borough, price) => {
+          setDecisions((ds) => [...ds, { year: run.current.year, kind: "buy", borough, price }]);
+          setBeat("idle");
+          setScreen("play");
+        }}
+      />
+    );
+  }
+  if (screen === "scenario") {
+    return (
+      <ScenarioScene
+        year={run.current.year}
+        scenario={run.current.scenario}
+        onContinue={() => { setSeenYear(run.current.year); setScreen("play"); }}
+      />
+    );
+  }
+  if (screen === "summary") {
+    return <SummaryScene run={run} path={path} onWhatIf={() => setScreen("counterfactual")} />;
+  }
+  if (screen === "counterfactual") {
+    return (
+      <CounterfactualScene
+        seed={seed}
+        path={path}
+        decisions={decisions}
+        asPlayed={run}
+        onRestart={() => setScreen("title")}
+        onAbout={openAbout}
+      />
+    );
+  }
+
+  // ---- the room ---------------------------------------------------------
+
+  // A year has turned since the player last saw a scenario card.
+  if (!run.finished && run.current.year > seenYear) {
+    setScreen("scenario");
+    return null;
+  }
+  if (run.finished) {
+    setScreen("summary");
+    return null;
+  }
 
   return (
-    <main style={{ fontFamily: "system-ui, sans-serif", maxWidth: 720, margin: "40px auto", padding: 16 }}>
-      <p style={{ background: "#fef3c7", padding: 8, fontSize: 13 }}>
-        Engine smoke harness (B). C: replace this file. {isStub() ? "predictions.json is still D's stub." : "Running on A's real predictions."}
-      </p>
-
-      <h1 style={{ fontSize: 22 }}>
-        {c.name}, {c.age} — {c.career} on {gbp(c.salary)}
-      </h1>
-      <p style={{ color: "#555" }}>
-        {run.current.year} · {run.current.tenure} · net worth {gbp(run.current.netWorth)} ·
-        housing {Math.round(run.current.housingCostRatio * 100)}% of take-home
-      </p>
-
-      {run.pending && (
-        <section style={{ border: "1px solid #ddd", padding: 16, marginTop: 16 }}>
-          <h2 style={{ fontSize: 18 }}>{run.pending.headline}</h2>
-          <p>{run.pending.body}</p>
-          <ul>
-            {run.pending.facts.map((f) => (
-              <li key={f.label}>
-                <strong>{f.label}:</strong>{" "}
-                {f.value ?? (f.before || "") + " → " + (f.after || "")}
-              </li>
-            ))}
-          </ul>
-          {run.pending.choices.map((ch, i) => (
-            <button key={i} onClick={() => choose(ch)} style={{ display: "block", margin: "6px 0", padding: 8 }}>
-              {ch.label}
-            </button>
-          ))}
-        </section>
-      )}
-
-      {run.finished && ifWaited && (
-        <section style={{ marginTop: 16 }}>
-          <h2 style={{ fontSize: 18 }}>2030</h2>
-          <p>
-            As played: <strong>{gbp(run.current.netWorth)}</strong>
-            <br />
-            Same future, if they had waited: <strong>{gbp(ifWaited.current.netWorth)}</strong>
-          </p>
-        </section>
-      )}
-
-      <table style={{ marginTop: 24, fontSize: 13, borderCollapse: "collapse" }}>
-        <tbody>
-          {run.years.map((y) => (
-            <tr key={y.year}>
-              <td style={{ padding: "2px 10px" }}>{y.year}</td>
-              <td style={{ padding: "2px 10px" }}>{y.tenure}</td>
-              <td style={{ padding: "2px 10px" }}>{(y.marketMove * 100).toFixed(1)}%</td>
-              <td style={{ padding: "2px 10px" }}>{gbp(y.netWorth)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </main>
+    <>
+      <Hud st={run.current} sound={sound} />
+      <Room
+        tenure={run.current.tenure}
+        spriteId={spriteId}
+        event={run.pending}
+        beat={beat}
+        onBeat={setBeat}
+        routeIndex={decisions.length}
+      >
+        {run.pending && beat === "done" && (
+          <DecisionCard
+            event={run.pending}
+            st={run.current}
+            onChoose={choose}
+            onCompare={
+              run.pending.kind === "buy_opportunity" ? () => setScreen("outlook") : undefined
+            }
+          />
+        )}
+      </Room>
+      <div
+        style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          padding: "7px 12px", borderTop: "2px solid var(--line)", background: "var(--panel)",
+        }}
+      >
+        <span style={{ display: "flex", gap: 7 }}>
+          <button className="tiny" onClick={openAbout}>What's real?</button>
+          <button
+            className="tiny sound-toggle"
+            aria-pressed={sound}
+            title={sound ? "Alerts are audible" : "Alerts are silent"}
+            onClick={() => setSound((s) => !s)}
+          >
+            {sound ? "♪ on" : "♪ off"}
+          </button>
+        </span>
+        <span className="tiny quiet">
+          {name} · {run.current.year} · one plausible future · seed {seed}
+        </span>
+        {beat !== "done" && run.pending && (
+          <button className="tiny" onClick={() => setBeat("done")}>Skip →</button>
+        )}
+        {(!run.pending || beat === "done") && <span />}
+      </div>
+    </>
   );
 }
