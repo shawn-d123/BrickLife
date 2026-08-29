@@ -1,0 +1,17 @@
+# node
+node_modules/
+dist/
+.vite/
+*.log
+
+# python (model lane)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
