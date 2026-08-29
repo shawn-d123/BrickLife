@@ -7,6 +7,7 @@
     "test_window": "2019-01 to 2024-12",
     "embargo_months": 12,
     "scenario_method": "Bank Rate elasticity -1.60pp growth per +1pp, applied to the median forecast (pooled model response)",
+    "rent_source": "ONS Price Index of Private Rents 2026-07; City of London imputed at the median gross yield",
     "test_mae": 0.04140957378756429,
     "baseline_mae_persistence": 0.06159818805147173,
     "baseline_mae_london": 0.0476409419358074,
@@ -38,7 +39,8 @@
     "E09000027": {
       "name": "Richmond upon Thames",
       "avg_price": 788952.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2318,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0801,
@@ -73,7 +75,8 @@
     "E09000001": {
       "name": "City of London",
       "avg_price": 626489.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2322,
+      "rent_source": "imputed (median gross yield 4.4%)",
       "forecast": {
         "base": {
           "p10": -0.0494,
@@ -108,7 +111,8 @@
     "E09000032": {
       "name": "Wandsworth",
       "avg_price": 677165.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2620,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0509,
@@ -143,7 +147,8 @@
     "E09000005": {
       "name": "Brent",
       "avg_price": 543292.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2012,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0481,
@@ -178,7 +183,8 @@
     "E09000029": {
       "name": "Sutton",
       "avg_price": 451049.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1553,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0595,
@@ -213,7 +219,8 @@
     "E09000024": {
       "name": "Merton",
       "avg_price": 612269.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2153,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0595,
@@ -248,7 +255,8 @@
     "E09000009": {
       "name": "Ealing",
       "avg_price": 570211.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2085,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0525,
@@ -283,7 +291,8 @@
     "E09000030": {
       "name": "Tower Hamlets",
       "avg_price": 455666.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2439,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0277,
@@ -318,7 +327,8 @@
     "E09000003": {
       "name": "Barnet",
       "avg_price": 585670.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1945,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0459,
@@ -353,7 +363,8 @@
     "E09000014": {
       "name": "Haringey",
       "avg_price": 642235.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2213,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0625,
@@ -388,7 +399,8 @@
     "E09000019": {
       "name": "Islington",
       "avg_price": 684506.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2854,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0584,
@@ -423,7 +435,8 @@
     "E09000023": {
       "name": "Lewisham",
       "avg_price": 492857.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1828,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0689,
@@ -458,7 +471,8 @@
     "E09000018": {
       "name": "Hounslow",
       "avg_price": 505371.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1945,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.04,
@@ -493,7 +507,8 @@
     "E09000015": {
       "name": "Harrow",
       "avg_price": 529169.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1773,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0573,
@@ -528,7 +543,8 @@
     "E09000010": {
       "name": "Enfield",
       "avg_price": 467558.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1821,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0511,
@@ -563,7 +579,8 @@
     "E09000016": {
       "name": "Havering",
       "avg_price": 444227.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1564,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0624,
@@ -598,7 +615,8 @@
     "E09000017": {
       "name": "Hillingdon",
       "avg_price": 471602.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1565,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0506,
@@ -633,7 +651,8 @@
     "E09000004": {
       "name": "Bexley",
       "avg_price": 405250.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1534,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0404,
@@ -668,7 +687,8 @@
     "E09000012": {
       "name": "Hackney",
       "avg_price": 616278.0,
-      "avg_rent_monthly": 1950,
+      "avg_rent_monthly": 2644,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0681,
@@ -703,7 +723,8 @@
     "E09000031": {
       "name": "Waltham Forest",
       "avg_price": 526831.0,
-      "avg_rent_monthly": 1480,
+      "avg_rent_monthly": 1765,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0939,
@@ -738,7 +759,8 @@
     "E09000002": {
       "name": "Barking and Dagenham",
       "avg_price": 356464.0,
-      "avg_rent_monthly": 1310,
+      "avg_rent_monthly": 1696,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0541,
@@ -773,7 +795,8 @@
     "E09000028": {
       "name": "Southwark",
       "avg_price": 569158.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2431,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0504,
@@ -808,7 +831,8 @@
     "E09000026": {
       "name": "Redbridge",
       "avg_price": 492434.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1724,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0651,
@@ -843,7 +867,8 @@
     "E09000007": {
       "name": "Camden",
       "avg_price": 799206.0,
-      "avg_rent_monthly": 2340,
+      "avg_rent_monthly": 2800,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0623,
@@ -878,7 +903,8 @@
     "E09000008": {
       "name": "Croydon",
       "avg_price": 391303.0,
-      "avg_rent_monthly": 1290,
+      "avg_rent_monthly": 1581,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0361,
@@ -913,7 +939,8 @@
     "E09000025": {
       "name": "Newham",
       "avg_price": 398566.0,
-      "avg_rent_monthly": 1520,
+      "avg_rent_monthly": 1927,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.033,
@@ -948,7 +975,8 @@
     "E09000011": {
       "name": "Greenwich",
       "avg_price": 470363.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1980,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0409,
@@ -983,7 +1011,8 @@
     "E09000022": {
       "name": "Lambeth",
       "avg_price": 549780.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2519,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0471,
@@ -1018,7 +1047,8 @@
     "E09000020": {
       "name": "Kensington and Chelsea",
       "avg_price": 1300757.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 3629,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0922,
@@ -1053,7 +1083,8 @@
     "E09000013": {
       "name": "Hammersmith and Fulham",
       "avg_price": 736006.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 2796,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0399,
@@ -1088,7 +1119,8 @@
     "E09000006": {
       "name": "Bromley",
       "avg_price": 515593.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1681,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0679,
@@ -1123,7 +1155,8 @@
     "E09000021": {
       "name": "Kingston upon Thames",
       "avg_price": 565988.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 1807,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0542,
@@ -1158,7 +1191,8 @@
     "E09000033": {
       "name": "City of Westminster",
       "avg_price": 856885.0,
-      "avg_rent_monthly": null,
+      "avg_rent_monthly": 3179,
+      "rent_source": "ONS PIPR 2026-07",
       "forecast": {
         "base": {
           "p10": -0.0893,

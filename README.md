@@ -9,12 +9,17 @@ the game via `web/src/data/predictions.json` and `web/public/backtest.png`.
 cd model
 python 01_build_panel.py       # -> data/london_panel.parquet
 python 02_baselines.py         # B0/B1/B2 console print (idea-lock deliverable)
+python 05_rents.py             # -> data/raw/london_borough_rent.csv  (run before 03)
 python 03_train_export.py      # -> web/src/data/predictions.json  (+ outputs/metrics.json)
 python 04_backtest_chart.py    # -> web/public/backtest.png
 ```
 
 `03` is self-contained: it runs the backtest, prints the go/no-go, refits, and
-writes the export. `pip install pandas numpy scikit-learn lightgbm matplotlib pyarrow`.
+writes the export.
+
+```
+pip install pandas numpy scikit-learn lightgbm matplotlib pyarrow openpyxl
+```
 
 ## Data
 
@@ -25,6 +30,12 @@ writes the export. `pip install pandas numpy scikit-learn lightgbm matplotlib py
   input rather than a hand-wave.
 - Bank Rate is the only macro series used. Affordability ratios were not merged
   (time); momentum and relative-position features carry the borough signal.
+- **ONS Price Index of Private Rents** (`data/raw/ons_pipr_monthly.xlsx`) — average
+  monthly rent by borough, latest month. `05_rents.py` extracts it and writes
+  `data/raw/london_borough_rent.csv` (price + rent, all 33). Not a model feature;
+  it only fills `avg_rent_monthly` in the export. City of London is not published
+  by ONS, so it is imputed at the median gross yield of the other 32 and labelled
+  `rent_source: "imputed …"`. Every other borough is `rent_source: "ONS PIPR …"`.
 
 ## Model
 

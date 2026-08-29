@@ -179,10 +179,12 @@ for f in imp.index:
     (up if corr[f] >= 0 else down).append(lab)
 drivers = {"up": up[:2], "down": down[:2]}
 
-RENT = {  # 00-CONTRACTS.md section 4 (D owns rent; None elsewhere until D fills)
-    "E09000031": 1480, "E09000012": 1950, "E09000025": 1520,
-    "E09000002": 1310, "E09000008": 1290, "E09000007": 2340,
-}
+# avg monthly rent, all 33 boroughs -- ONS Price Index of Private Rents (latest
+# month), City of London imputed at the median gross yield. Built by 05_rents.py.
+_rent = pd.read_csv("../data/raw/london_borough_rent.csv")
+RENT = _rent.set_index("code")["avg_rent_monthly"].astype(int).to_dict()
+RENT_SRC = _rent.set_index("code")["rent_source"].to_dict()
+RENT_REF = "2026-07"
 
 out = {
     "meta": {
@@ -194,6 +196,8 @@ out = {
         "embargo_months": 12,
         "scenario_method": f"Bank Rate elasticity {elas*100:.2f}pp growth per +1pp, "
                            f"applied to the median forecast (pooled model response)",
+        "rent_source": f"ONS Price Index of Private Rents {RENT_REF}; "
+                       f"City of London imputed at the median gross yield",
         "test_mae": metrics["test_mae"],
         "baseline_mae_persistence": metrics["baseline_mae_persistence"],
         "baseline_mae_london": metrics["baseline_mae_london"],
@@ -228,12 +232,14 @@ for i, code in enumerate(lat_all["AreaCode"].values):
         "name": lat.loc[code, "RegionName"],
         "avg_price": float(lat.loc[code, "AveragePrice"]),
         "avg_rent_monthly": RENT.get(code),
+        "rent_source": RENT_SRC.get(code),
         "forecast": {k: {kk: round(vv, 4) if kk != "p_decline" else vv
                          for kk, vv in v.items()} for k, v in fc.items()},
         "drivers": drivers,
     }
 
 for code, b in out["boroughs"].items():
+    assert isinstance(b["avg_rent_monthly"], int) and b["avg_rent_monthly"] > 0, (code, b)
     for name, f in b["forecast"].items():
         assert f["p10"] <= f["p50"] <= f["p90"], (code, name, f)
         assert 0.0 <= f["p_decline"] <= 1.0, (code, name, f)

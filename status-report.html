@@ -1,0 +1,361 @@
+<title>BRICKLIFE Model Lane</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --ground: #f5f6f8;
+    --panel: #ffffff;
+    --ink: #1a1f26;
+    --ink-soft: #545d6b;
+    --hair: #dde1e7;
+    --accent: #35618f;
+    --accent-tint: #e9f0f7;
+    --done: #3f7d5a;
+    --done-tint: #e7f1ea;
+    --caveat: #a9761f;
+    --caveat-tint: #f6eede;
+    --todo: #7a8494;
+    --shadow: 0 1px 2px rgba(20,30,45,.05), 0 8px 24px rgba(20,30,45,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #12151a;
+      --panel: #1a1e25;
+      --ink: #e6e9ee;
+      --ink-soft: #9aa4b2;
+      --hair: #2b313b;
+      --accent: #7aa9d6;
+      --accent-tint: #1b2733;
+      --done: #6bbd8f;
+      --done-tint: #17251e;
+      --caveat: #d6a24e;
+      --caveat-tint: #29220f;
+      --todo: #79828f;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #12151a;
+    --panel: #1a1e25;
+    --ink: #e6e9ee;
+    --ink-soft: #9aa4b2;
+    --hair: #2b313b;
+    --accent: #7aa9d6;
+    --accent-tint: #1b2733;
+    --done: #6bbd8f;
+    --done-tint: #17251e;
+    --caveat: #d6a24e;
+    --caveat-tint: #29220f;
+    --todo: #79828f;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Public Sans", system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: clamp(28px, 6vw, 64px) clamp(18px, 5vw, 40px) 72px;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .eyebrow .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+
+  h1 {
+    font-family: "Newsreader", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    line-height: 1.12;
+    letter-spacing: -.012em;
+    text-wrap: balance;
+    margin: 14px 0 10px;
+  }
+  .lead {
+    font-size: 1.06rem;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0 0 32px;
+  }
+
+  h2 {
+    font-family: "Newsreader", Georgia, serif;
+    font-weight: 600;
+    font-size: 1.28rem;
+    letter-spacing: -.005em;
+    margin: 0 0 4px;
+  }
+  .sec-label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 22px;
+    display: block;
+  }
+  section { margin-top: 46px; }
+
+  .verdict {
+    background: var(--panel);
+    border: 1px solid var(--hair);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+  }
+  .verdict h2 { margin-bottom: 8px; }
+  .verdict .tag {
+    display: inline-block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    padding: 3px 9px;
+    border-radius: 5px;
+    background: var(--done-tint);
+    color: var(--done);
+    border: 1px solid color-mix(in srgb, var(--done) 30%, transparent);
+    vertical-align: 2px;
+    margin-left: 8px;
+  }
+  .verdict p { margin: 10px 0 0; font-size: .97rem; }
+  .verdict p .k { color: var(--ink); font-weight: 600; }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hair);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  .metric {
+    background: var(--panel);
+    padding: 16px 14px 14px;
+  }
+  .metric .n {
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.01em;
+  }
+  .metric .l {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    line-height: 1.35;
+  }
+  @media (max-width: 560px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  ul.check { list-style: none; margin: 0; padding: 0; }
+  ul.check li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 12px;
+    padding: 11px 0;
+    border-top: 1px solid var(--hair);
+    font-size: .97rem;
+  }
+  ul.check li:first-child { border-top: none; }
+  ul.check .mk {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .mk.done { color: var(--done); }
+  .mk.todo { color: var(--todo); }
+  .mk.next { color: var(--accent); }
+  li .who {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: .03em;
+    color: var(--ink-soft);
+    background: var(--accent-tint);
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-right: 6px;
+    white-space: nowrap;
+  }
+  li .note { color: var(--ink-soft); }
+
+  .sched {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .93rem;
+    margin-top: 6px;
+  }
+  .sched th, .sched td {
+    text-align: left;
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--hair);
+    vertical-align: top;
+  }
+  .sched th {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .sched td.t {
+    font-family: "IBM Plex Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--accent);
+  }
+  .sched tr.is-done td.t { color: var(--done); }
+  .sched tr.is-done td { color: var(--ink-soft); }
+
+  .cmd {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    background: var(--panel);
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    margin-top: 14px;
+  }
+  .cmd .c { color: var(--ink-soft); }
+  .cmd b { color: var(--accent); font-weight: 500; }
+
+  footer {
+    margin-top: 54px;
+    padding-top: 20px;
+    border-top: 1px solid var(--hair);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    letter-spacing: .02em;
+  }
+  a { color: var(--accent); }
+</style>
+
+<div class="wrap">
+
+  <div class="eyebrow">
+    <span>BRICKLIFE</span><span class="dot"></span>
+    <span>Lane A · Model &amp; Data</span><span class="dot"></span>
+    <span>Sat 29 Aug 2026</span>
+  </div>
+
+  <h1>Model lane: what's built, what's left</h1>
+  <p class="lead">
+    A borough-by-month forecast of London house-price growth, 12 months ahead,
+    feeding the game through one JSON file and one chart. The model is done and
+    handed off. What remains is mostly integration in the other three lanes.
+  </p>
+
+  <div class="verdict">
+    <h2>Go / no-go <span class="tag">GREEN · with a caveat</span></h2>
+    <p>
+      <span class="k">Error:</span> across a six-year rolling backtest the point
+      forecast beats all three baselines — MAE <b>0.041</b> vs persistence 0.062,
+      London-trend 0.048, naive mean 0.069.
+    </p>
+    <p>
+      <span class="k">Caveat:</span> up/down direction accuracy (60.5%) sits just
+      under the majority-class rate (66%) and slips at turning points. So the pitch
+      leads with the <span class="k">calibrated 80% interval</span> and the
+      <span class="k">borough decline probability</span>, not the single number.
+    </p>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><div class="n">0.041</div><div class="l">Test MAE<br>beats 0.048 best baseline</div></div>
+    <div class="metric"><div class="n">84%</div><div class="l">Interval coverage<br>target 80%</div></div>
+    <div class="metric"><div class="n">60.5%</div><div class="l">Direction acc.<br>majority 66%</div></div>
+    <div class="metric"><div class="n">33</div><div class="l">Boroughs<br>all 3 scenarios</div></div>
+  </div>
+
+  <section>
+    <span class="sec-label">Done — shipped &amp; verified</span>
+    <h2>What's built</h2>
+    <ul class="check">
+      <li><span class="mk done">✓</span><span><b>Panel.</b> 33 London boroughs × 375 months (1995–2026), 16 features. Bank of England Bank Rate fetched and merged, so the rate scenarios are a real model input.</span></li>
+      <li><span class="mk done">✓</span><span><b>Baselines printed</b> — B0 persistence 0.062, B1 London-trend 0.048, B2 naive mean 0.069. The idea-lock deliverable.</span></li>
+      <li><span class="mk done">✓</span><span><b>Four LightGBM heads</b> — quantile 0.1 / 0.5 / 0.9 plus a decline classifier, with the 80% interval conformalised so the band is honestly sized.</span></li>
+      <li><span class="mk done">✓</span><span><b>Rolling-origin backtest</b>, 2019–2024, 12-month embargo between every train and test block. Per-year and pooled metrics saved.</span></li>
+      <li><span class="mk done">✓</span><span><b><code>predictions.json</code></b> — 33 boroughs, <code>is_stub: false</code>, <code>p10 ≤ p50 ≤ p90</code> on every row, growth as fractions. Validates against Contract §2.</span></li>
+      <li><span class="mk done">✓</span><span><b><code>backtest.png</code></b> in <code>web/public/</code> — Hackney, model median vs actual vs persistence, shaded band. One panel, big fonts.</span></li>
+      <li><span class="mk done">✓</span><span><b>Deterministic export</b> — same three inputs produce a byte-identical file (checked by hash).</span></li>
+      <li><span class="mk done">✓</span><span><b>README for D</b> — the go/no-go sentence, the caveats, and the <code>scenario_method</code> wording for the "what's real" panel.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="sec-label">Left to do</span>
+    <h2>What's left</h2>
+    <ul class="check">
+      <li><span class="mk next">→</span><span><span class="who">TEAM</span> Decide the pitch framing: call it <b>GREEN</b> (error beats every baseline) or <b>AMBER</b> (lead with calibrated uncertainty). Same numbers either way — flip <code>meta.go_no_go</code> if AMBER.</span></li>
+      <li><span class="mk next">→</span><span><span class="who">B</span> Point <code>simulate</code> at the real <code>predictions.json</code>: market moves = <code>p50</code> plus seeded noise inside the <code>p10</code>–<code>p90</code> band; apply <code>rate_delta_pp</code> to the player's mortgage separately.</span></li>
+      <li><span class="mk next">→</span><span><span class="who">B</span> Purity check — <code>simulate</code> called twice with identical args returns identical <code>RunState</code>.</span></li>
+      <li><span class="mk next">→</span><span><span class="who">C</span> Outlook screen reads the forecast per borough; end-of-run counterfactual screen wired to <code>counterfactual()</code>.</span></li>
+      <li><span class="mk next">→</span><span><span class="who">D</span> Place <code>backtest.png</code>; make the "what's real" panel state the direction caveat and the <code>scenario_method</code> line verbatim.</span></li>
+      <li><span class="mk todo">○</span><span><span class="who">A</span> Optional only, if time: replace the fixed −1.6pp rate elasticity with a fitted one; add an affordability feature; per-borough driver strings. Modelling was scheduled to stop at 16:00.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="sec-label">Contract checkpoints — remaining</span>
+    <h2>Timeline from here</h2>
+    <table class="sched">
+      <thead><tr><th>Time</th><th>Who</th><th>Gate</th></tr></thead>
+      <tbody>
+        <tr class="is-done"><td class="t">15:00</td><td>A</td><td>Real <code>predictions.json</code> on main, <code>is_stub: false</code> — done</td></tr>
+        <tr><td class="t">15:30</td><td>B</td><td>Engine reads the real forecast; market moves come from the band</td></tr>
+        <tr><td class="t">16:00</td><td>All</td><td>Feature freeze — full playthrough works end to end</td></tr>
+        <tr><td class="t">16:30</td><td>D</td><td>Screen recording captured</td></tr>
+        <tr><td class="t">16:45</td><td>D</td><td>Submitted</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <span class="sec-label">Reproduce</span>
+    <h2>Two commands</h2>
+    <div class="cmd">
+      <span class="c"># model — writes web/src/data/predictions.json + web/public/backtest.png</span><br>
+      cd model &amp;&amp; python <b>01_build_panel.py</b> &amp;&amp; python <b>02_baselines.py</b> &amp;&amp; python <b>03_train_export.py</b> &amp;&amp; python <b>04_backtest_chart.py</b><br><br>
+      <span class="c"># game</span><br>
+      cd web &amp;&amp; npm run dev
+    </div>
+  </section>
+
+  <footer>
+    model/ · data/london_panel.parquet · outputs/metrics.json · outputs/backtest_rolling.parquet<br>
+    UK HPI full file + BoE Bank Rate (IUDBEDR) · LightGBM quantile + conformal · House London #1
+  </footer>
+
+</div>
