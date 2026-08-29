@@ -2,11 +2,13 @@
 
 **Project:** BrickLife — London 2030 · House London #1, Newspeak House, Sat 29 Aug 2026
 **Lane:** Person B — `web/src/engine/`
-**Status:** Engine complete and tested. **Running on A's real model output** (`is_stub: false`,
-33 boroughs). Not committed.
+**Status:** Engine complete, tested, committed and pushed. Verified against A's latest
+33-borough real-rent export in a throwaway swap — **but that export is not yet in the live
+app**, because it landed in the wrong folder (again — see §6). One `cp` away from fully live.
 
-This document is written so another assistant can pick the work up cold. Read it top to
-bottom before touching anything.
+This document is written so another assistant (GPT or otherwise) can pick the work up cold.
+Read it top to bottom before touching anything. It supersedes any earlier version of this
+file you may find in chat history — this one reflects the state **after** `git pull`.
 
 ---
 
@@ -19,20 +21,21 @@ usually open in.**
 |---|---|
 | **The repo (work here)** | `C:\Users\dsouz\OneDrive\Documents\GitHub\brickLife\BrickLife` |
 | GitHub remote | `github.com/shawn-d123/BrickLife` |
-| **Primers + frozen contract** | `C:\Users\dsouz\OneDrive\Documents\GitHub\brickLife\Primers and refrence MD files\` |
+| **Primers + original frozen contract** | `C:\Users\dsouz\OneDrive\Documents\GitHub\brickLife\Primers and refrence MD files\` |
+| **Amended contract (now also in-repo)** | `BrickLife/00-CONTRACTS.md` — A added a copy with an amendment note at the top; verified byte-identical to the original in the section that matters to us (§4 below) |
 | Unrelated older project | `...\GitHub\Hackathon-Route-planning` (finished April project — *not* this work) |
 
-Read `00-CONTRACTS.md` (the authority) and `PRIMER-B-engine.md` (this lane) before making
-design decisions.
+Read `00-CONTRACTS.md` at the repo root (it is now the live copy, amended) and
+`PRIMER-B-engine.md` in the primers folder before making design decisions.
 
 ### Lane ownership — nobody edits outside their own directory
 
-| Person | Owns |
-|---|---|
-| A | the `*.py` model scripts (currently at repo root), `web/src/data/predictions.json` |
-| **B (us)** | **`web/src/engine/` — entire directory, no JSX in it, ever** |
-| C | `web/src/game/` |
-| D | `web/src/content/`, `README.md`, places `backtest.png` |
+| Person | Owns | Status as of this handoff |
+|---|---|---|
+| A | model scripts (root, should be `model/`), `predictions.json` | 33 boroughs, real rents, pushed — see §6 for the path issue |
+| **B (us)** | **`web/src/engine/` — entire directory, no JSX in it, ever** | **done, committed, pushed** |
+| C | `web/src/game/` | not started — `App.tsx` is still B's throwaway harness |
+| D | `web/src/content/`, `README.md` | not synced — `boroughs.ts` still has only 6 of 33 boroughs |
 
 ---
 
@@ -55,7 +58,7 @@ build step. It is also why **every relative import inside `engine/` must carry a
 
 ## 3. What is built
 
-`web/src/engine/`, ~1,800 lines, 9 files:
+`web/src/engine/`, ~1,800 lines, 9 files, all committed on `main`:
 
 | File | Purpose |
 |---|---|
@@ -67,7 +70,7 @@ build step. It is also why **every relative import inside `engine/` must carry a
 | `events.ts` | Six event families as gated "beats", plus `canAfford` / `depositFor`. |
 | `sim.ts` | `rollCircumstances`, `drawScenarioPath`, `simulate`, `counterfactual`. |
 | `index.ts` | Barrel — what C imports. |
-| `sim.test.ts` | 18 tests. Also validates A's export (§6). |
+| `sim.test.ts` | 18 tests. Also validates any predictions.json placed at `web/src/data/`. |
 
 ### The public API (all C ever calls)
 
@@ -110,6 +113,11 @@ The counterfactual replays the *same* future against a *different* decision. If 
 goes unseeded, that comparison silently becomes meaningless and the best moment in the demo
 dies. A test scans the engine source and fails if the banned words appear in real code (it
 strips comments first, so docstrings mentioning them are fine).
+
+**This is verified, not asserted:** confirmed against the current `00-CONTRACTS.md` at the
+repo root — A's amendment (see §6) touched only borough coverage; Section 3 (the engine
+contract, `types.ts`) diffs **byte-identical** to the original frozen version in the primers
+folder. Nothing about the API or the purity rule has changed.
 
 The seed itself is drawn **outside** the engine, in C's React state:
 `useState(() => Date.now() >>> 0)`.
@@ -156,66 +164,88 @@ because the counterfactual replays decisions against events they were not made f
 
 ---
 
-## 6. The predictions.json integration — LIVE
+## 6. The predictions.json integration — the ONE thing left to do
 
-**A's real export is in place.** `web/src/data/predictions.json` is now `is_stub: false`,
-33 boroughs, trained through 2025-03, model `lgbm-quantile x3 + binary; conformalised 80%
-interval`. All 18 tests pass against it with **zero engine changes** — which was the whole
-point of the adapter.
+### Current live state
 
-### How it got there (and the one thing still to fix)
+`web/src/data/predictions.json` — the file the app and `npm test` actually read — has
+**`is_stub: false`, 33 boroughs, but only 6 of them with real rent.** The other 27 use the
+engine's yield-derived estimate (see below). This is a snapshot from earlier today, copied in
+by hand from A's first export.
 
-A's `03_train_export.py` line 26 has `OUT = "../web/src/data/predictions.json"`, which assumes
-the script lives in `model/` as the contract specifies. A's scripts sit at the **repo root**,
-so the export landed at **`BrickLife/predictions.json`** instead. It was copied into
-`web/src/data/predictions.json` by hand.
+### What just arrived and is NOT yet applied
 
-**That copy is manual and will go stale if A reruns the model.** The permanent fix is A's:
-move the four `.py` files into `model/` (as the contract says), or change `OUT` to
-`"web/src/data/predictions.json"` and run from the repo root. Until then, after any rerun:
+A pushed a new commit (`02da6e9`, "Lane A: ONS rents for all 33 boroughs...") containing a
+fresh `predictions.json` with **real ONS-sourced rent for all 33 boroughs** (field
+`rent_source: "ONS PIPR 2026-07"` on each). This file landed at:
 
-```bash
-cp predictions.json web/src/data/predictions.json && cd web && npm test
+```
+BrickLife/predictions.json          <- the fresh one, repo root, NOT live
+BrickLife/web/src/data/predictions.json   <- what the app reads, still the OLDER copy
 ```
 
-### Defensive reads
+**This is the exact same path bug as before, recurring.** `03_train_export.py` line 26 is
+`OUT = "../web/src/data/predictions.json"`, which only resolves correctly if the script is run
+from inside a `model/` subdirectory. The README now documents `cd model && python
+03_train_export.py`, but **no `model/` directory exists in the repo** — the `.py` files are
+still sitting at the repo root. So every time A reruns the export, it writes one level up from
+where the app actually looks, and someone has to notice and copy it by hand.
+
+### The one thing to do
+
+```bash
+cp predictions.json web/src/data/predictions.json
+cd web && npm test
+```
+
+**This was verified to work in this session** — swapped the fresh file into place temporarily,
+ran the full suite: typecheck clean, 18/18 tests pass, `estimatedRentCount()` correctly drops
+to 0 of 33 (no more estimation needed, every borough now has real ONS rent). Then the working
+tree was restored to the pulled state, so the live app is still on the older file as of this
+handoff. **Do the `cp` above, rerun `npm test` to confirm, then commit.**
+
+**Permanent fix, still not done:** ask A to either move the four/five `.py` scripts into
+`model/` (as both contracts specify) or change `OUT` and `PANEL` to resolve from the repo
+root. Until one of those happens, this manual copy-and-verify step will be needed after every
+model rerun.
+
+### The contract amendment (confirmed safe)
+
+A also amended `00-CONTRACTS.md` and committed it into the repo (previously it only lived in
+the primers folder). The amendment note, verbatim:
+
+> **Amendment — 2026-08-29, Lane A.** Borough coverage extended from the MVP six to **all
+> 33**. `boroughs.ts` (section 4) now lists every borough with real average prices (UK HPI,
+> latest month) and real average rents (ONS Price Index of Private Rents, latest month; City
+> of London imputed). `predictions.json` covers all 33 with `avg_rent_monthly` populated
+> everywhere, plus a new optional per-borough `rent_source` string. No field renamed or
+> removed — additive only. Other three lanes: re-sync `boroughs.ts` and confirm the outlook
+> screen handles 33 entries.
+
+Verified in this session by diffing the two contract files: **Section 3 (the engine API,
+`types.ts`) is byte-for-byte identical** to the original frozen version. The amendment only
+touches borough coverage and is additive, exactly as it claims. No engine change required.
+
+### Defensive reads (already handles all of the above)
 
 `predictions.ts` is the single read point and every read is defensive: scenario falls back to
 `base` then to a neutral forecast; quantiles are coerced to finite numbers and sorted so
 `p10 <= p50 <= p90`; unknown borough codes fall back to the first exported one; missing price
 falls back to D's `boroughs.ts` then a constant.
 
-**This was not paranoia.** Testing against a deliberately broken export produced 16 crashes or
-NaN runs out of 300. After hardening: 300 of 300 clean. A's real export then turned out to
-have exactly one of those defects (below), which the adapter absorbed silently.
-
-### Rent estimation — 27 of 33 boroughs
-
-A's export fills `avg_rent_monthly` for only the six MVP boroughs; the `RENT` dict at
-`03_train_export.py` line 182 returns `None` for the other 27, so they arrive as `null`.
-
-Rather than give Richmond and Barking the same flat fallback, `predictions.ts` computes the
-**mean gross rental yield** across whichever boroughs *do* carry a rent, and derives the rest
-from price. On the current export the six known boroughs sit in a tight 3.37–4.58% band
-(mean 3.94%), so the estimate is reasonable and correctly ordered:
-
-| Borough | Price | Rent | Source |
-|---|---|---|---|
-| Kensington and Chelsea | £1,300,757 | £4,270 | estimated |
-| City of Westminster | £856,885 | £2,810 | estimated |
-| Brent | £543,292 | £1,780 | estimated |
-| Croydon | £391,303 | £1,290 | from export |
-| Barking and Dagenham | £356,464 | £1,310 | from export |
-
-It self-calibrates as more rents are filled and disappears entirely once all 33 are present.
-Two helpers exist for D's "what's real" panel — **this should be disclosed on screen**:
+**Rent estimation, for as long as any borough is missing one:** rather than a flat fallback,
+`predictions.ts` computes the mean gross rental yield across whichever boroughs *do* carry a
+real rent, and derives the rest from price at that yield. This is what covered the 27 missing
+boroughs before A's latest push, and it disappears automatically (drops to 0 estimated) the
+moment the file in §6 is swapped in. Two helpers exist for D's "what's real" panel:
 
 ```ts
 rentIsEstimated(code): boolean
-estimatedRentCount(): number     // currently 27
+estimatedRentCount(): number
 ```
 
-**Ask A or D to fill the `RENT` dict.** It is a five-minute job and removes the caveat.
+**Once the `cp` above is done, `estimatedRentCount()` returns 0 — tell D this can come off the
+"what's real" panel, or be left in as evidence of the pipeline working.**
 
 ### The export validator
 
@@ -228,50 +258,57 @@ usability in seconds and names the offending borough if not.
 
 ## 7. Verification status — what has actually been proven
 
-- **18/18 tests pass against A's real 33-borough export.** Typecheck clean. Build clean.
+- **18/18 tests pass** against both the currently-live file and A's fresh 33-real-rent export
+  (tested via a temporary swap in this session, then reverted — see §6).
+- Typecheck clean, production build clean.
 - Purity verified on both an empty run and a finished run; arguments provably not mutated.
 - 60 seeds × 3 play styles all reach 2030 with no impossible state.
-- Full playthrough clicked through in a real browser on the real data, no console errors; the
-  UI correctly reports "Running on A's real predictions."
+- Full playthrough clicked through in a real browser, no console errors.
 - Previously verified against a deliberately corrupted export (missing rents, missing
   scenarios, null prices, crossed quantiles): 300/300 runs clean.
+- Confirmed via git log that D and C have not touched their lanes since the engine was
+  committed — nothing to re-sync with on their side yet.
+- Confirmed via diff that the amended `00-CONTRACTS.md` leaves the engine's API section
+  byte-identical.
 
 ---
 
 ## 8. Open items and blockers
 
-### BLOCKER — nothing is committed
-The entire `web/` tree, `.gitignore`, `HANDOFF-B-engine.md` and `.claude/launch.json` are
-untracked. The work exists only on this disk. A `.gitignore` is in place so `node_modules` and
-`dist` stay out; total committed payload is ~1.9 MB, which is fine. There are also two
-unstaged deletions (`backtest_rolling.parquet`, `metrics.json` at root — A moved them into
-`outputs/`) that should be resolved in the same commit. **This is the single biggest risk.**
+### Not a blocker anymore — everything is committed and pushed
+Repo history: `part1` (this engine + scaffold) → `Lane A: ONS rents...` (A's 33-borough
+update) → a clean merge, all on `origin/main`. `git status` is clean. This was the single
+biggest risk in the previous handoff; it is resolved.
 
-### Item — A's export path is manual (see §6)
-Move the `.py` files into `model/`, or fix `OUT`. Until then re-copy after every rerun.
+### The one live action item — apply A's fresh export (see §6 in full)
+```bash
+cp predictions.json web/src/data/predictions.json && cd web && npm test
+```
+Verified to work. Not yet applied to the tracked file as of this handoff.
 
-### Item — 27 boroughs have estimated rents (see §6)
-Ask A or D to fill the `RENT` dict in `03_train_export.py`.
+### A's export path is still broken (see §6)
+Ask A to move the `.py` scripts into `model/`, or fix the `OUT`/`PANEL` paths. This will keep
+recurring otherwise.
 
-### Item — files that belong to other people
-Written as placeholders because they were not on main when the engine needed them. Each is
-marked "owned by [X], overwrite freely" at the top. **Tell the owners so they overwrite rather
-than add alongside:**
+### D has not synced `boroughs.ts`
+Still 6 of 33 boroughs. A's amendment explicitly asked for this. Not a blocker for the engine
+— `predictions.json` is authoritative and will cover all 33 once the copy above is done — but
+C's UI may read `boroughs.ts` directly, so D should still do it.
 
-- `web/src/content/boroughs.ts`, `web/src/content/copy.ts` (D) — verbatim from the contract.
-- `web/src/game/App.tsx` (C) — a throwaway engine smoke harness that *is* the contract's
-  integration, working. C copies the six lines that matter and deletes the rest.
-- `web/` scaffold, `index.html`, `main.tsx`, `vite.config.ts`, `tsconfig.json`, `package.json`
-  — unowned; the repo was bare and someone had to scaffold it.
+### C has not started
+`web/src/game/App.tsx` is still B's throwaway smoke-test harness — the exact integration from
+the contract, working, meant to be copied from and then deleted. No conflict risk yet, but
+worth checking in on.
 
-### Item — model quality caveats (A's lane, affects the pitch)
-From the shipped export's `meta`:
+### Model quality caveats (A's lane, affects the pitch)
+From the shipped export's `meta` (unchanged by the rent update):
 
 - **Good:** test MAE **0.0414** beats persistence (**0.0616**) *and* London-wide growth
   (**0.0476**). That clears the "common-factor trap" the plan warned about — this is the
   number to show, and it is a genuinely defensible result.
 - **Weak:** `direction_acc` **0.605** is *below* `direction_acc_majority` **0.660** — worse
-  than always guessing the majority class. Per-year it degrades badly (2023: 0.477, 2024: 0.437).
+  than always guessing the majority class. Per-year it degrades badly (2023: 0.477, 2024:
+  0.437).
 - **Weak:** `brier` **0.297** is *worse* than `brier_baserate` **0.253** — the decline
   probability underperforms the base rate.
 - Raw 80% coverage was 0.490 against a target of 0.80; conformal padding lifts it to **0.836**.
@@ -286,6 +323,13 @@ than a claim they can poke a hole in.
 
 ## 9. Gotchas that cost time — do not rediscover these
 
+- **Check `is_stub` and the actual file path, never assume a swap worked.** This happened
+  twice: A's export landed at repo root, not `web/src/data/`, and the app kept quietly running
+  on the stub / stale file both times with no error. Always confirm
+  `require('./web/src/data/predictions.json').meta.is_stub` directly.
+- **Check git log before assuming a lane caught up.** `git log --oneline -- <path>` is the
+  fast way to see whether D or C have touched their files since your last check, rather than
+  re-reading everything.
 - **Counterfactual borough swap.** The primer's example swaps a purchase to Barking
   (`E09000002`). If the player *already* bought there it is a no-op and both endings look
   identical. Pick a borough the player did not choose. C needs telling.
@@ -297,11 +341,12 @@ than a claim they can poke a hole in.
 - **Bash heredocs choke on the larger TS files.** Use the Write tool for anything substantial;
   a silent parse failure wrote nothing at all once.
 - **`.claude/launch.json` is read from the primary working directory**, not the repo you are
-  editing. The `bricklife-web` entry was added to the Hackathon-Route-planning one, pointing at
-  this repo's `web/` via `npm --prefix`.
-- **Check where A's files actually landed.** The export was at the repo root, not
-  `web/src/data/`, and the app happily kept running on the stub with `is_stub: true`. Always
-  confirm `is_stub` rather than assuming a swap worked.
+  editing. The `bricklife-web` entry was added to a different repo's config, pointing at this
+  repo's `web/` via `npm --prefix`.
+- **When told "don't make changes, just answer" and you need to verify something,** copy the
+  file, test, then explicitly restore the working tree and confirm `git status` is clean
+  again before reporting back. Verifying and leaving a mess behind is not the same as not
+  making changes.
 
 ---
 
@@ -310,11 +355,13 @@ than a claim they can poke a hole in.
 Per `PRIMER-B-engine.md`, B is done building and becomes a second pair of hands on C. Priority
 order from here:
 
-1. **Commit and push.** Everything else is worthless if this is lost.
-2. **Tell C** about `App.tsx`, the `DecisionKind` mapping, and the borough-swap gotcha.
-3. **Tell D** their content files are placeholders, that `is_stub` is now `false`, and that
-   27 boroughs carry estimated rents that the "what's real" panel should disclose.
-4. **Ask A** to fix the export path and fill the `RENT` dict.
+1. **Apply the pending `cp` from §6 and re-run `npm test`, then commit.** This is the only
+   thing standing between the app and fully-real data for all 33 boroughs.
+2. **Tell A** to fix the export path so this stops recurring.
+3. **Tell D** their content files are placeholders — `boroughs.ts` needs the 33-borough sync
+   the amendment asked for.
+4. **Tell C** about `App.tsx` (copy from it, then delete it), the `DecisionKind` mapping in
+   §5, and the borough-swap gotcha in §9.
 5. Help C render. Do not add engine features. If time runs out, the minimum viable demo is
    three events — `rent_increase`, `buy_opportunity`, `rate_change` — plus the counterfactual.
    **Never cut the counterfactual.**
@@ -323,10 +370,12 @@ order from here:
 
 ## 11. Working style to continue in
 
-Verify rather than assert — every claim in §7 was produced by actually running something. When
-a test fails, work out whether the code or the expectation is wrong before changing either;
-three of the failures during this build were bad test expectations, not bugs. Keep the honest
-number (the 25% affordability rate) rather than tuning it away. Stay inside the engine lane,
-and when another lane's file is missing or misplaced, write a clearly-labelled placeholder or
-make the adapter absorb it — then tell the owner, and record the permanent fix here rather than
-leaving a silent manual step.
+Verify rather than assert — every claim in §7 was produced by actually running something, not
+by reading a commit message and assuming it worked. When a test fails, work out whether the
+code or the expectation is wrong before changing either; several failures during this build
+were bad test expectations, not bugs. Keep the honest number (the 25% affordability rate)
+rather than tuning it away. Stay inside the engine lane, and when another lane's file is
+missing or misplaced, write a clearly-labelled placeholder or make the adapter absorb it —
+then tell the owner, and record the permanent fix here rather than leaving a silent manual
+step. When asked to just report status without changing anything, verify by testing in a
+throwaway swap and always leave the working tree exactly as you found it.
