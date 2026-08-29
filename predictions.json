@@ -1,0 +1,1194 @@
+{
+  "meta": {
+    "trained_through": "2025-03",
+    "trained_from": "2010-01",
+    "backtest": "rolling-origin 2019-2024, 12-month embargo",
+    "model": "lgbm-quantile x3 + binary; conformalised 80% interval",
+    "test_window": "2019-01 to 2024-12",
+    "embargo_months": 12,
+    "scenario_method": "Bank Rate elasticity -1.60pp growth per +1pp, applied to the median forecast (pooled model response)",
+    "test_mae": 0.04140957378756429,
+    "baseline_mae_persistence": 0.06159818805147173,
+    "baseline_mae_london": 0.0476409419358074,
+    "baseline_mae_mean": 0.06906913293036623,
+    "direction_acc": 0.6052188552188552,
+    "direction_acc_majority": 0.6595117845117845,
+    "coverage_80": 0.8358585858585859,
+    "brier": 0.29707108112542097,
+    "brier_baserate": 0.2528741025566302,
+    "go_no_go": "GREEN",
+    "caveat": "Point forecast beats persistence but only matches the London-trend baseline; direction accuracy sits near the majority rate and slips at turning points (2018, 2025). Shipped value is the conformalised 80% interval and the borough-level decline probability, both derived from the same quantile heads.",
+    "is_stub": false
+  },
+  "scenarios": {
+    "base": {
+      "label": "Steady as she goes",
+      "rate_delta_pp": 0.0
+    },
+    "rate_shock": {
+      "label": "Rates stay high",
+      "rate_delta_pp": 1.5
+    },
+    "rate_cuts": {
+      "label": "Borrowing eases",
+      "rate_delta_pp": -1.25
+    }
+  },
+  "boroughs": {
+    "E09000027": {
+      "name": "Richmond upon Thames",
+      "avg_price": 788952.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0801,
+          "p50": -0.0166,
+          "p90": 0.0769,
+          "p_decline": 0.606
+        },
+        "rate_shock": {
+          "p10": -0.1041,
+          "p50": -0.0406,
+          "p90": 0.0529,
+          "p_decline": 0.746
+        },
+        "rate_cuts": {
+          "p10": -0.0601,
+          "p50": 0.0034,
+          "p90": 0.0969,
+          "p_decline": 0.478
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000001": {
+      "name": "City of London",
+      "avg_price": 626489.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0494,
+          "p50": 0.1,
+          "p90": 0.3161,
+          "p_decline": 0.242
+        },
+        "rate_shock": {
+          "p10": -0.0734,
+          "p50": 0.076,
+          "p90": 0.2921,
+          "p_decline": 0.297
+        },
+        "rate_cuts": {
+          "p10": -0.0294,
+          "p50": 0.12,
+          "p90": 0.3361,
+          "p_decline": 0.2
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000032": {
+      "name": "Wandsworth",
+      "avg_price": 677165.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0509,
+          "p50": 0.0176,
+          "p90": 0.0919,
+          "p_decline": 0.376
+        },
+        "rate_shock": {
+          "p10": -0.0749,
+          "p50": -0.0064,
+          "p90": 0.0679,
+          "p_decline": 0.545
+        },
+        "rate_cuts": {
+          "p10": -0.0309,
+          "p50": 0.0376,
+          "p90": 0.1119,
+          "p_decline": 0.25
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000005": {
+      "name": "Brent",
+      "avg_price": 543292.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0481,
+          "p50": 0.0169,
+          "p90": 0.0857,
+          "p_decline": 0.373
+        },
+        "rate_shock": {
+          "p10": -0.0721,
+          "p50": -0.0071,
+          "p90": 0.0617,
+          "p_decline": 0.554
+        },
+        "rate_cuts": {
+          "p10": -0.0281,
+          "p50": 0.0369,
+          "p90": 0.1057,
+          "p_decline": 0.24
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000029": {
+      "name": "Sutton",
+      "avg_price": 451049.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0595,
+          "p50": 0.0052,
+          "p90": 0.0662,
+          "p_decline": 0.458
+        },
+        "rate_shock": {
+          "p10": -0.0835,
+          "p50": -0.0188,
+          "p90": 0.0422,
+          "p_decline": 0.649
+        },
+        "rate_cuts": {
+          "p10": -0.0395,
+          "p50": 0.0252,
+          "p90": 0.0862,
+          "p_decline": 0.304
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000024": {
+      "name": "Merton",
+      "avg_price": 612269.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0595,
+          "p50": 0.004,
+          "p90": 0.0665,
+          "p_decline": 0.468
+        },
+        "rate_shock": {
+          "p10": -0.0835,
+          "p50": -0.02,
+          "p90": 0.0425,
+          "p_decline": 0.658
+        },
+        "rate_cuts": {
+          "p10": -0.0395,
+          "p50": 0.024,
+          "p90": 0.0865,
+          "p_decline": 0.313
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000009": {
+      "name": "Ealing",
+      "avg_price": 570211.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0525,
+          "p50": 0.0084,
+          "p90": 0.0713,
+          "p_decline": 0.431
+        },
+        "rate_shock": {
+          "p10": -0.0765,
+          "p50": -0.0156,
+          "p90": 0.0473,
+          "p_decline": 0.627
+        },
+        "rate_cuts": {
+          "p10": -0.0325,
+          "p50": 0.0284,
+          "p90": 0.0913,
+          "p_decline": 0.279
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000030": {
+      "name": "Tower Hamlets",
+      "avg_price": 455666.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0277,
+          "p50": 0.031,
+          "p90": 0.127,
+          "p_decline": 0.304
+        },
+        "rate_shock": {
+          "p10": -0.0517,
+          "p50": 0.007,
+          "p90": 0.103,
+          "p_decline": 0.454
+        },
+        "rate_cuts": {
+          "p10": -0.0077,
+          "p50": 0.051,
+          "p90": 0.147,
+          "p_decline": 0.199
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000003": {
+      "name": "Barnet",
+      "avg_price": 585670.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0459,
+          "p50": 0.0163,
+          "p90": 0.0786,
+          "p_decline": 0.368
+        },
+        "rate_shock": {
+          "p10": -0.0699,
+          "p50": -0.0077,
+          "p90": 0.0546,
+          "p_decline": 0.563
+        },
+        "rate_cuts": {
+          "p10": -0.0259,
+          "p50": 0.0363,
+          "p90": 0.0986,
+          "p_decline": 0.227
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000014": {
+      "name": "Haringey",
+      "avg_price": 642235.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0625,
+          "p50": -0.0035,
+          "p90": 0.0634,
+          "p_decline": 0.529
+        },
+        "rate_shock": {
+          "p10": -0.0865,
+          "p50": -0.0275,
+          "p90": 0.0394,
+          "p_decline": 0.713
+        },
+        "rate_cuts": {
+          "p10": -0.0425,
+          "p50": 0.0165,
+          "p90": 0.0834,
+          "p_decline": 0.369
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000019": {
+      "name": "Islington",
+      "avg_price": 684506.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0584,
+          "p50": 0.0122,
+          "p90": 0.0767,
+          "p_decline": 0.408
+        },
+        "rate_shock": {
+          "p10": -0.0824,
+          "p50": -0.0118,
+          "p90": 0.0527,
+          "p_decline": 0.588
+        },
+        "rate_cuts": {
+          "p10": -0.0384,
+          "p50": 0.0322,
+          "p90": 0.0967,
+          "p_decline": 0.27
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000023": {
+      "name": "Lewisham",
+      "avg_price": 492857.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0689,
+          "p50": -0.0109,
+          "p90": 0.0711,
+          "p_decline": 0.579
+        },
+        "rate_shock": {
+          "p10": -0.0929,
+          "p50": -0.0349,
+          "p90": 0.0471,
+          "p_decline": 0.738
+        },
+        "rate_cuts": {
+          "p10": -0.0489,
+          "p50": 0.0091,
+          "p90": 0.0911,
+          "p_decline": 0.434
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000018": {
+      "name": "Hounslow",
+      "avg_price": 505371.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.04,
+          "p50": 0.0203,
+          "p90": 0.0892,
+          "p_decline": 0.344
+        },
+        "rate_shock": {
+          "p10": -0.064,
+          "p50": -0.0037,
+          "p90": 0.0652,
+          "p_decline": 0.529
+        },
+        "rate_cuts": {
+          "p10": -0.02,
+          "p50": 0.0403,
+          "p90": 0.1092,
+          "p_decline": 0.212
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000015": {
+      "name": "Harrow",
+      "avg_price": 529169.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0573,
+          "p50": 0.008,
+          "p90": 0.0714,
+          "p_decline": 0.436
+        },
+        "rate_shock": {
+          "p10": -0.0813,
+          "p50": -0.016,
+          "p90": 0.0474,
+          "p_decline": 0.625
+        },
+        "rate_cuts": {
+          "p10": -0.0373,
+          "p50": 0.028,
+          "p90": 0.0914,
+          "p_decline": 0.288
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000010": {
+      "name": "Enfield",
+      "avg_price": 467558.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0511,
+          "p50": 0.0033,
+          "p90": 0.0674,
+          "p_decline": 0.471
+        },
+        "rate_shock": {
+          "p10": -0.0751,
+          "p50": -0.0207,
+          "p90": 0.0434,
+          "p_decline": 0.673
+        },
+        "rate_cuts": {
+          "p10": -0.0311,
+          "p50": 0.0233,
+          "p90": 0.0874,
+          "p_decline": 0.307
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000016": {
+      "name": "Havering",
+      "avg_price": 444227.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0624,
+          "p50": -0.005,
+          "p90": 0.0636,
+          "p_decline": 0.541
+        },
+        "rate_shock": {
+          "p10": -0.0864,
+          "p50": -0.029,
+          "p90": 0.0396,
+          "p_decline": 0.723
+        },
+        "rate_cuts": {
+          "p10": -0.0424,
+          "p50": 0.015,
+          "p90": 0.0836,
+          "p_decline": 0.38
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000017": {
+      "name": "Hillingdon",
+      "avg_price": 471602.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0506,
+          "p50": -0.0018,
+          "p90": 0.0684,
+          "p_decline": 0.515
+        },
+        "rate_shock": {
+          "p10": -0.0746,
+          "p50": -0.0258,
+          "p90": 0.0444,
+          "p_decline": 0.711
+        },
+        "rate_cuts": {
+          "p10": -0.0306,
+          "p50": 0.0182,
+          "p90": 0.0884,
+          "p_decline": 0.348
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000004": {
+      "name": "Bexley",
+      "avg_price": 405250.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0404,
+          "p50": 0.0142,
+          "p90": 0.07,
+          "p_decline": 0.371
+        },
+        "rate_shock": {
+          "p10": -0.0644,
+          "p50": -0.0098,
+          "p90": 0.046,
+          "p_decline": 0.59
+        },
+        "rate_cuts": {
+          "p10": -0.0204,
+          "p50": 0.0342,
+          "p90": 0.09,
+          "p_decline": 0.214
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000012": {
+      "name": "Hackney",
+      "avg_price": 616278.0,
+      "avg_rent_monthly": 1950,
+      "forecast": {
+        "base": {
+          "p10": -0.0681,
+          "p50": 0.0159,
+          "p90": 0.0675,
+          "p_decline": 0.382
+        },
+        "rate_shock": {
+          "p10": -0.0921,
+          "p50": -0.0081,
+          "p90": 0.0435,
+          "p_decline": 0.561
+        },
+        "rate_cuts": {
+          "p10": -0.0481,
+          "p50": 0.0359,
+          "p90": 0.0875,
+          "p_decline": 0.248
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000031": {
+      "name": "Waltham Forest",
+      "avg_price": 526831.0,
+      "avg_rent_monthly": 1480,
+      "forecast": {
+        "base": {
+          "p10": -0.0939,
+          "p50": -0.0178,
+          "p90": 0.0634,
+          "p_decline": 0.614
+        },
+        "rate_shock": {
+          "p10": -0.1179,
+          "p50": -0.0418,
+          "p90": 0.0394,
+          "p_decline": 0.752
+        },
+        "rate_cuts": {
+          "p10": -0.0739,
+          "p50": 0.0022,
+          "p90": 0.0834,
+          "p_decline": 0.485
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000002": {
+      "name": "Barking and Dagenham",
+      "avg_price": 356464.0,
+      "avg_rent_monthly": 1310,
+      "forecast": {
+        "base": {
+          "p10": -0.0541,
+          "p50": 0.0266,
+          "p90": 0.091,
+          "p_decline": 0.319
+        },
+        "rate_shock": {
+          "p10": -0.0781,
+          "p50": 0.0026,
+          "p90": 0.067,
+          "p_decline": 0.481
+        },
+        "rate_cuts": {
+          "p10": -0.0341,
+          "p50": 0.0466,
+          "p90": 0.111,
+          "p_decline": 0.205
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000028": {
+      "name": "Southwark",
+      "avg_price": 569158.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0504,
+          "p50": 0.0086,
+          "p90": 0.0781,
+          "p_decline": 0.432
+        },
+        "rate_shock": {
+          "p10": -0.0744,
+          "p50": -0.0154,
+          "p90": 0.0541,
+          "p_decline": 0.621
+        },
+        "rate_cuts": {
+          "p10": -0.0304,
+          "p50": 0.0286,
+          "p90": 0.0981,
+          "p_decline": 0.284
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000026": {
+      "name": "Redbridge",
+      "avg_price": 492434.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0651,
+          "p50": -0.0047,
+          "p90": 0.0858,
+          "p_decline": 0.532
+        },
+        "rate_shock": {
+          "p10": -0.0891,
+          "p50": -0.0287,
+          "p90": 0.0618,
+          "p_decline": 0.687
+        },
+        "rate_cuts": {
+          "p10": -0.0451,
+          "p50": 0.0153,
+          "p90": 0.1058,
+          "p_decline": 0.398
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000007": {
+      "name": "Camden",
+      "avg_price": 799206.0,
+      "avg_rent_monthly": 2340,
+      "forecast": {
+        "base": {
+          "p10": -0.0623,
+          "p50": 0.0222,
+          "p90": 0.1235,
+          "p_decline": 0.38
+        },
+        "rate_shock": {
+          "p10": -0.0863,
+          "p50": -0.0018,
+          "p90": 0.0995,
+          "p_decline": 0.51
+        },
+        "rate_cuts": {
+          "p10": -0.0423,
+          "p50": 0.0422,
+          "p90": 0.1435,
+          "p_decline": 0.28
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000008": {
+      "name": "Croydon",
+      "avg_price": 391303.0,
+      "avg_rent_monthly": 1290,
+      "forecast": {
+        "base": {
+          "p10": -0.0361,
+          "p50": -0.0011,
+          "p90": 0.0658,
+          "p_decline": 0.511
+        },
+        "rate_shock": {
+          "p10": -0.0601,
+          "p50": -0.0251,
+          "p90": 0.0418,
+          "p_decline": 0.736
+        },
+        "rate_cuts": {
+          "p10": -0.0161,
+          "p50": 0.0189,
+          "p90": 0.0858,
+          "p_decline": 0.318
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000025": {
+      "name": "Newham",
+      "avg_price": 398566.0,
+      "avg_rent_monthly": 1520,
+      "forecast": {
+        "base": {
+          "p10": -0.033,
+          "p50": 0.0321,
+          "p90": 0.1014,
+          "p_decline": 0.27
+        },
+        "rate_shock": {
+          "p10": -0.057,
+          "p50": 0.0081,
+          "p90": 0.0774,
+          "p_decline": 0.439
+        },
+        "rate_cuts": {
+          "p10": -0.013,
+          "p50": 0.0521,
+          "p90": 0.1214,
+          "p_decline": 0.16
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000011": {
+      "name": "Greenwich",
+      "avg_price": 470363.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0409,
+          "p50": 0.0056,
+          "p90": 0.0665,
+          "p_decline": 0.447
+        },
+        "rate_shock": {
+          "p10": -0.0649,
+          "p50": -0.0184,
+          "p90": 0.0425,
+          "p_decline": 0.669
+        },
+        "rate_cuts": {
+          "p10": -0.0209,
+          "p50": 0.0256,
+          "p90": 0.0865,
+          "p_decline": 0.27
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000022": {
+      "name": "Lambeth",
+      "avg_price": 549780.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0471,
+          "p50": 0.0056,
+          "p90": 0.0706,
+          "p_decline": 0.452
+        },
+        "rate_shock": {
+          "p10": -0.0711,
+          "p50": -0.0184,
+          "p90": 0.0466,
+          "p_decline": 0.656
+        },
+        "rate_cuts": {
+          "p10": -0.0271,
+          "p50": 0.0256,
+          "p90": 0.0906,
+          "p_decline": 0.289
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000020": {
+      "name": "Kensington and Chelsea",
+      "avg_price": 1300757.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0922,
+          "p50": 0.0035,
+          "p90": 0.1202,
+          "p_decline": 0.483
+        },
+        "rate_shock": {
+          "p10": -0.1162,
+          "p50": -0.0205,
+          "p90": 0.0962,
+          "p_decline": 0.597
+        },
+        "rate_cuts": {
+          "p10": -0.0722,
+          "p50": 0.0235,
+          "p90": 0.1402,
+          "p_decline": 0.388
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000013": {
+      "name": "Hammersmith and Fulham",
+      "avg_price": 736006.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0399,
+          "p50": 0.0114,
+          "p90": 0.2181,
+          "p_decline": 0.455
+        },
+        "rate_shock": {
+          "p10": -0.0639,
+          "p50": -0.0126,
+          "p90": 0.1941,
+          "p_decline": 0.55
+        },
+        "rate_cuts": {
+          "p10": -0.0199,
+          "p50": 0.0314,
+          "p90": 0.2381,
+          "p_decline": 0.378
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000006": {
+      "name": "Bromley",
+      "avg_price": 515593.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0679,
+          "p50": -0.0011,
+          "p90": 0.0556,
+          "p_decline": 0.509
+        },
+        "rate_shock": {
+          "p10": -0.0919,
+          "p50": -0.0251,
+          "p90": 0.0316,
+          "p_decline": 0.699
+        },
+        "rate_cuts": {
+          "p10": -0.0479,
+          "p50": 0.0189,
+          "p90": 0.0756,
+          "p_decline": 0.348
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000021": {
+      "name": "Kingston upon Thames",
+      "avg_price": 565988.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0542,
+          "p50": 0.0036,
+          "p90": 0.073,
+          "p_decline": 0.471
+        },
+        "rate_shock": {
+          "p10": -0.0782,
+          "p50": -0.0204,
+          "p90": 0.049,
+          "p_decline": 0.659
+        },
+        "rate_cuts": {
+          "p10": -0.0342,
+          "p50": 0.0236,
+          "p90": 0.093,
+          "p_decline": 0.317
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    },
+    "E09000033": {
+      "name": "City of Westminster",
+      "avg_price": 856885.0,
+      "avg_rent_monthly": null,
+      "forecast": {
+        "base": {
+          "p10": -0.0893,
+          "p50": 0.0552,
+          "p90": 0.2432,
+          "p_decline": 0.335
+        },
+        "rate_shock": {
+          "p10": -0.1133,
+          "p50": 0.0312,
+          "p90": 0.2192,
+          "p_decline": 0.405
+        },
+        "rate_cuts": {
+          "p10": -0.0693,
+          "p50": 0.0752,
+          "p90": 0.2632,
+          "p_decline": 0.281
+        }
+      },
+      "drivers": {
+        "up": [
+          "Transaction recovery",
+          "Sales activity"
+        ],
+        "down": [
+          "Price level",
+          "Price relative to London"
+        ]
+      }
+    }
+  }
+}
