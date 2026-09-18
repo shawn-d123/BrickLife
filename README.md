@@ -219,7 +219,7 @@ web/            the game (React + TypeScript + Vite)
   src/game/     everything rendered: scenes, components, sound
   src/content/  event copy, career/borough fallback data
   src/data/     predictions.json, the model's checked-in output
-docs/           the model writeup, the original design contract, integration notes
+docs/           the model writeup and the banner and screenshots used above
 ```
 
 ---

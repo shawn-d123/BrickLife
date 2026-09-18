@@ -1,11 +1,11 @@
 /**
  * BrickLife — engine contract types.
  *
- * This file is the contract from `docs/design-contract.md` section 3, and the
- * game is built against it directly.
+ * This is the shape the game is built against directly: change something
+ * here and every scene, card, and screen in web/src/game/ feels it.
  *
- * Additions beyond the frozen contract are OPTIONAL fields only (allowed by
- * the contract rules) and are marked `// optional extension`.
+ * Additions beyond the original contract are OPTIONAL fields only, marked
+ * `// optional extension`.
  */
 
 export type BoroughCode = string; // "E09000031"
