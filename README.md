@@ -94,63 +94,18 @@ That rule is the entire reason the counterfactual works. "What if you'd
 waited" has to replay the *identical* market, or the comparison means
 nothing.
 
-## Four decisions a judge actually asked about
+A few of the choices worth knowing about:
 
-**Why `simulate` had to be pure, not just tidy.**
-The counterfactual screen takes a finished life, swaps one decision, and
-reruns it against the same seed and scenario path. Unseeded randomness or a
-wall-clock read anywhere in that path would turn "same future, different
-choice" into "different future, different choice" without anyone noticing,
-and the screen would show a comparison that never actually happened.
-
-Two checks guard this. A unit test asserts `simulate` returns byte-identical
-JSON on repeat calls, and a separate script
-(`web/scripts/check-counterfactual.ts`) runs 400 simulated lives to confirm
-every alternate ending genuinely differs from the one played. Skip both and a
-broken counterfactual would still look fine on screen: three numbers, none of
-them meaning what they claim to.
-
-**Why the rate scenario hits twice.**
-"Rates stay high" was originally meant to run entirely through the model: a
-higher-rate scenario would nudge the price forecast down, and that would be
-the whole effect. In practice it landed as barely a flicker. Momentum and
-price-relative-to-London features dominate the LightGBM heads, so a rate
-shock moves the median forecast by a fraction of a point, far short of the
-loudest beat a five-year demo needs.
-
-The fix routes the rate shock a second way. It still nudges the model's
-forecast a little, but it also moves the player's own mortgage rate directly,
-through real amortisation arithmetic (`Mortgage.basePct + rate_delta_pp`,
-recomputed every year). A 1.5-point shock on a typical first-time-buyer
-mortgage adds roughly £150 to £250 to the monthly payment, a number everyone
-in the room recognised immediately because it's their own mortgage
-statement.
-
-**Why affordability lives in the engine, not the screen showing it.**
-The buy-opportunity event only offers a "buy here" choice once `canAfford()`
-(lender income multiple, minimum deposit, cash needed on completion) confirms
-it's genuinely possible. The borough comparison table calls that exact same
-function to colour boroughs as in reach, a stretch, or out of reach.
-
-One shared check keeps both screens honest. Two separate ones would have
-eventually drifted, and drift here means a button that looks clickable but
-does nothing, or a table that disagrees with the card sitting right beneath
-it.
-
-**Why the model's weak spots are on screen too.**
-The backtest (rolling origin, 2019 to 2024, a 12-month embargo at every
-split so the target window can't leak into training) shows the point
-forecast beating both persistence and a London-wide trend baseline on error.
-That part is a real, earned result. The same backtest shows direction
-accuracy sitting below a majority-class baseline, and a decline classifier
-that trails its own base rate.
-
-The original pitch leaned on the model's cleverness. The backtest made that
-position hard to defend, so the in-game "about the data" screen states both
-results plainly, each number sitting next to the baseline it's measured
-against. Trust the calibrated interval; treat the up-or-down call as a coin
-with slightly worse odds than you'd hope. The game says so before a judge
-gets the chance to ask.
+- **The rate scenario reaches the player's own mortgage**, not just the
+  model's forecast. A 1.5-point shock adds roughly £150 to £250 to a typical
+  first-time-buyer's monthly payment, worked out the same way a real lender
+  would.
+- **Affordability is checked in exactly one place.** `canAfford()` decides
+  both whether the buy card offers a purchase and how the borough comparison
+  table colours each borough, so the two screens always agree.
+- **The model's own scorecard is on screen**, strengths and weaknesses side
+  by side, on the in-game "about the data" panel, each number next to the
+  baseline it's measured against.
 
 ## Deal yourself in
 
