@@ -1,5 +1,5 @@
 """
-05_rents.py  --  BRICKLIFE / House London, Lane A
+05_rents.py  --  BrickLife / House London Data Hackathon
 
 Average monthly private rent for all 33 London boroughs, so the game has a rent
 figure everywhere and not just the MVP six.

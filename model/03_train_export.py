@@ -1,5 +1,5 @@
 """
-03_train_export.py  --  BRICKLIFE / House London, Lane A
+03_train_export.py  --  BrickLife / House London Data Hackathon
 
 Four LightGBM heads (quantile 0.1 / 0.5 / 0.9 + a binary decline classifier),
 proven on a rolling-origin chronological backtest with a 12-month embargo, then

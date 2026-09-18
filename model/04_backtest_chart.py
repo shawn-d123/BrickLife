@@ -1,5 +1,5 @@
 """
-04_backtest_chart.py  --  BRICKLIFE / House London, Lane A
+04_backtest_chart.py  --  BrickLife / House London Data Hackathon
 
 One panel, three lines, big fonts. Actual vs predicted median 12-month-ahead
 growth for one recognisable borough across the rolling-origin backtest, with the

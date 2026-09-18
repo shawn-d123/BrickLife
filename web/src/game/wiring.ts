@@ -1,29 +1,29 @@
 // ============================================================================
-//  THE INTEGRATION POINT.  Lane C reads everything through this file.
+//  THE INTEGRATION POINT. The game reads everything through this file.
 //
-//  Wired to the real lanes:
-//    [B] web/src/engine      simulate / counterfactual / finance / events
-//    [D] web/src/content     copy.ts, boroughs.ts
-//    [A] web/src/data        predictions.json  (is_stub: false)
+//  Wired to:
+//    web/src/engine      simulate / counterfactual / finance / events
+//    web/src/content     copy.ts, boroughs.ts
+//    web/src/data         predictions.json  (is_stub: false)
 //
 //  Nothing in web/src/game/ imports engine/, content/ or data/ directly, and
 //  nothing in web/src/game/ writes outside web/src/game/.
 // ============================================================================
 
-// ---- ENGINE (B) -----------------------------------------------------------
+// ---- ENGINE -----------------------------------------------------------------
 export {
   rollCircumstances,
   drawScenarioPath,
   simulate,
   counterfactual,
-  // finance, used by C's buying and outlook screens
+  // finance, used by the buying and outlook screens
   monthlyPayment,
   stampDuty,
   netMonthly,
   maxAffordable,
   MAX_LTI,
   MIN_DEPOSIT,
-  // affordability, so C's "can you reach this?" matches the engine exactly
+  // affordability, so the game's "can you reach this?" matches the engine exactly
   canAfford,
   depositFor,
   cashNeededToBuy,
@@ -43,23 +43,24 @@ export type {
 } from "../engine/index.ts";
 export type { BoroughFacts } from "../engine/index.ts";
 
-// ---- CONTENT (D) ----------------------------------------------------------
+// ---- CONTENT ------------------------------------------------------------
 export { EVENT_COPY, SCENARIO_COPY, CAREERS } from "../content/copy.ts";
 export { BOROUGHS, boroughByCode } from "../content/boroughs.ts";
 
-// ---- CONTENT (C-side flavour D does not define) ----------------------------
+// ---- PRESENTATION FLAVOUR (not part of the content contract) --------------
 export { NOISE, NPC_LINE, NPC_NAME } from "./flavour.ts";
 
-// ---- DATA (A) -------------------------------------------------------------
+// ---- MODEL DATA ------------------------------------------------------------
 import { isStub as engineIsStub } from "../engine/index.ts";
 
-/** Drives the "what's real" disclosure. False now A's real export has landed. */
+/** Drives the "what's real" disclosure. False now the real export has landed. */
 export const IS_STUB: boolean = engineIsStub();
 
 /**
- * A's export carries provenance fields beyond the frozen contract's meta block.
- * B's PredictionsMeta type is the contract and stays as it is; C reads the
- * extras through this widened view rather than editing someone else's file.
+ * The model's export carries provenance fields beyond the frozen contract's
+ * meta block. `PredictionsMeta` is the contract and stays as it is; the game
+ * reads the extras through this widened view instead of editing the engine's
+ * own types.
  */
 export interface ExtraMeta {
   trained_from?: string;
@@ -74,7 +75,7 @@ import { PREDICTIONS as PRED } from "../engine/index.ts";
 export const META = PRED.meta as P["meta"] & ExtraMeta;
 
 // ---- C-side presentation helpers ------------------------------------------
-// These are display maths, not simulation state, so they live in C's lane.
+// These are display maths, not simulation state, so they live in the game, not the engine.
 import { getForecast as fc, boroughFacts as facts, canAfford as engineCanAfford,
          cashNeededToBuy as engineCashNeeded } from "../engine/index.ts";
 import type { BoroughCode as Code, Forecast as Fc, ScenarioId as Scn,

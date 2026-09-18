@@ -1,5 +1,5 @@
 /**
- * Public surface of the engine. OWNER: [B].
+ * Public surface of the engine.
  *
  * C only ever needs these four functions plus the types:
  *

@@ -1,5 +1,5 @@
 /**
- * Seeded RNG. OWNER: [B].
+ * Seeded RNG.
  *
  * The only source of randomness allowed anywhere in `web/src/engine/`.
  * No Math.random, no Date.now — the counterfactual replays the same future

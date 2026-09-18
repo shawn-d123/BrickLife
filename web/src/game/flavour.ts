@@ -1,7 +1,6 @@
-// Presentation flavour owned by [C]. D's copy.ts covers the event headlines,
-// scenario lines and careers; these are the extra voices C puts on screen so
-// the model is one source in a noisy market rather than an oracle (spec 21).
-// If D wants them, move them into content/copy.ts and re-export from wiring.
+// Presentation flavour. content/copy.ts covers the event headlines, scenario
+// lines and careers; these are the extra voices on screen so the model reads
+// as one source in a noisy market rather than an oracle.
 
 export const NOISE: Record<string, { source: string; line: string }[]> = {
   rent_increase: [

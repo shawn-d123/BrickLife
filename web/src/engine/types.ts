@@ -1,11 +1,11 @@
 /**
  * BrickLife — engine contract types.
  *
- * OWNER: [B]. This file is the contract from `00-CONTRACTS.md` section 3 and
- * C builds against it. Any change here is announced to the team.
+ * This file is the contract from `docs/design-contract.md` section 3, and the
+ * game is built against it directly.
  *
  * Additions beyond the frozen contract are OPTIONAL fields only (allowed by
- * the contract rules) and are marked `// [B] optional extension`.
+ * the contract rules) and are marked `// optional extension`.
  */
 
 export type BoroughCode = string; // "E09000031"
@@ -40,10 +40,10 @@ export interface Mortgage {
   ratePct: number;              // 4.75 means 4.75%
   monthly: number;
   monthsRemaining: number;
-  basePct?: number;             // [B] optional extension: rate before the scenario delta
+  basePct?: number;             // optional extension: rate before the scenario delta
 }
 
-/** [B] optional extension: the widened forecast band for the year ahead, for C's fan chart. */
+/** optional extension: the widened forecast band for the year ahead, for the outlook fan chart. */
 export interface Outlook {
   p10: number;
   p50: number;
@@ -76,8 +76,8 @@ export interface YearState {
   totalRentPaid: number;
   totalMortgagePaid: number;
 
-  lodgerIncomeMonthly?: number; // [B] optional extension
-  outlook?: Outlook;            // [B] optional extension
+  lodgerIncomeMonthly?: number; // optional extension
+  outlook?: Outlook;            // optional extension
 }
 
 export interface EventFact {
@@ -97,16 +97,16 @@ export interface EventChoice {
 export type EventKind =
   | "rent_increase" | "buy_opportunity" | "rate_change"
   | "household" | "employment" | "mortgage_reset"
-  // [C] extension, agreed at merge: renters were seeing four events to an
-  // owner's six, two of them the same rent rise. This is the renter's own
-  // pressure beat, so every year has two decisions whatever your tenure.
+  // Added at merge time: renters were seeing four events to an owner's six,
+  // two of them the same rent rise. This is the renter's own pressure beat,
+  // so every year has two decisions whatever your tenure.
   | "landlord_sells";
 
 export type NpcId = "landlord" | "estate_agent" | "bank" | "partner" | "employer";
 
 /**
- * [B] optional extension: the numbers behind an event, so applying a decision
- * uses exactly what the player was shown. C can ignore this entirely.
+ * optional extension: the numbers behind an event, so applying a decision
+ * uses exactly what the player was shown. The game can ignore this entirely.
  */
 export interface EventDetail {
   oldRent?: number;
@@ -130,11 +130,11 @@ export interface GameEvent {
   kind: EventKind;
   npc: NpcId;
   year: number;
-  headline: string;             // from D's copy.ts
+  headline: string;             // from content/copy.ts
   body: string;
   facts: EventFact[];
   choices: EventChoice[];
-  detail?: EventDetail;         // [B] optional extension
+  detail?: EventDetail;         // optional extension
 }
 
 export interface RunState {
@@ -146,7 +146,7 @@ export interface RunState {
   log: Decision[];
 }
 
-// ---------- shape of predictions.json (produced by D at 12:15, A at 15:00) ----------
+// ---------- shape of predictions.json (the model pipeline's export) ----------
 
 export interface Forecast {
   p10: number;

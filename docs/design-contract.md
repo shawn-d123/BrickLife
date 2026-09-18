@@ -1,4 +1,13 @@
-# BRICKLIFE — Shared Contracts
+# BrickLife — the design contract
+
+Written and frozen in the first 20 minutes of a one-day build (House London Data
+Hackathon, 29 August 2026), before any of us wrote a feature. Kept verbatim below,
+timestamps and all, because it's the actual reason three people working in
+parallel for five hours merged with almost no conflicts: `A` is Hemakesh Bavuluru
+(model/data), `B` is Shawn D'Souza (the simulation engine), `C` is Bartosz
+Bielecki (the game). `D` — copy and content — was planned but never staffed.
+
+---
 
 **Freeze this at 11:50. Everything in this file is agreed by all four people before anyone
 writes a feature.** After 11:50 the four lanes do not need to talk to each other except at

@@ -1,6 +1,7 @@
-// PLACEHOLDER written by [B] at 12:35 because D's file was not on main yet and
-// the engine cannot roll circumstances without it. Content is copied verbatim
-// from 00-CONTRACTS.md section 4. [D] owns this file — overwrite freely.
+// Fallback borough data (6 of 33), used only if predictions.json is ever
+// missing a code the engine asks for. Written as a stopgap early in the build
+// so character generation didn't have to wait on the model export; the real
+// predictions.json now covers all 33 boroughs and is authoritative.
 
 export interface BoroughInfo {
   code: string;

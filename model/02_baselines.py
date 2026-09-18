@@ -1,5 +1,5 @@
 """
-02_baselines.py  --  BRICKLIFE / House London, Lane A
+02_baselines.py  --  BrickLife / House London Data Hackathon
 The idea-lock deliverable: three baseline MAEs for 12-month-ahead borough growth,
 scored chronologically on 2022-01 .. 2024-12.
 

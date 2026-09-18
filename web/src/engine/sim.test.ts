@@ -1,5 +1,5 @@
 /**
- * Engine tests. OWNER: [B]. Run with `npm test` (no install needed — Node 24
+ * Engine tests. Run with `npm test` (no install needed — Node 24
  * strips the types itself).
  *
  * Covers the definition of done from PRIMER-B:
@@ -80,7 +80,7 @@ test("affordability is capped by both the income multiple and the deposit", () =
 // lands, `npm test` tells you immediately whether it is usable.
 
 console.log("");
-console.log("predictions.json (" + (isStub() ? "D's stub" : "A's real export") + ")");
+console.log("predictions.json (" + (isStub() ? "stub" : "real export") + ")");
 
 test("every borough exposes a usable, ordered forecast under every scenario", () => {
   const codes = boroughCodes();

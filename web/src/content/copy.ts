@@ -1,7 +1,8 @@
-// PLACEHOLDER written by [B] at 12:35 so the engine has event text to attach.
-// Shape is exactly 00-CONTRACTS.md section 4. [D] owns this file — overwrite
-// freely. The engine falls back to its own text for any missing key, so D can
-// rewrite every string here without touching engine logic.
+// Event headline/body copy. Written early in the build as a stopgap so the
+// engine had text to attach to each event — the content lane that was meant
+// to replace it was never staffed, so this is what actually shipped. The
+// engine falls back to its own wording for any key missing here, so this file
+// can be rewritten freely without touching engine logic.
 
 import type { ScenarioId } from "../engine/types.ts";
 
@@ -47,7 +48,7 @@ export const CAREERS = [
   "Care Worker",
 ];
 
-// [B] added: the engine needs names to roll a character. D can replace the list.
+// Placeholder first names; never replaced with anything more characterful.
 export const NAMES = [
   "Amara", "Ravi", "Sinead", "Tomasz", "Nadia", "Kofi",
   "Elif", "Danny", "Priya", "Marcus", "Yusuf", "Chloe",

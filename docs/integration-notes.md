@@ -1,20 +1,25 @@
-# Integration — all four lanes, merged
+# Integration notes
 
-The lanes are combined. This file records how they fit together and what to
-touch if a lane ships again.
+Written mid-build, once all three of our lanes had landed on `main` and needed
+wiring together. Kept as-is because it records real decisions made under time
+pressure, not because the "lane" framing is precious — Lane A is Hemakesh
+Bavuluru (model/data), Lane B is Shawn D'Souza (the simulation engine), Lane C
+is Bartosz Bielecki (the game itself). A fourth lane, D — copy and content —
+was planned but never staffed; its responsibilities got absorbed into the
+engine's own fallback text and into Bartosz's `flavour.ts`.
 
 ## Wiring
 
-**Everything lane C renders goes through one file: [`src/game/wiring.ts`](src/game/wiring.ts).**
+**Everything the game renders goes through one file: [`src/game/wiring.ts`](../web/src/game/wiring.ts).**
 Nothing in `src/game/` imports `engine/`, `content/` or `data/` directly, so a
-new drop from any lane is a change to that one file.
+change to any other lane is a change to that one file.
 
-| Lane | Owns | C consumes |
+| Lane | Owns | The game consumes |
 |---|---|---|
-| **A** | `predictions.json`, the model scripts | 33 boroughs, forecasts, `meta` scorecard — via B's `predictions.ts` |
-| **B** | `src/engine/` | `simulate`, `counterfactual`, `rollCircumstances`, `drawScenarioPath`, finance, `canAfford`, `boroughFacts` |
-| **C** | `src/game/`, `public/assets/` | — |
-| **D** | `src/content/` | `EVENT_COPY`, `SCENARIO_COPY`, `CAREERS` |
+| **A — model/data** | `predictions.json`, the model scripts | 33 boroughs, forecasts, `meta` scorecard — via the engine's `predictions.ts` |
+| **B — engine** | `src/engine/` | `simulate`, `counterfactual`, `rollCircumstances`, `drawScenarioPath`, finance, `canAfford`, `boroughFacts` |
+| **C — game** | `src/game/`, `public/assets/` | — |
+| **D — content** *(unstaffed)* | `src/content/` | `EVENT_COPY`, `SCENARIO_COPY`, `CAREERS` — still the engine's original placeholders |
 
 ## Decisions taken during the merge
 

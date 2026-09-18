@@ -1,5 +1,5 @@
 """
-01_build_panel.py  --  BRICKLIFE / House London, Lane A
+01_build_panel.py  --  BrickLife / House London Data Hackathon
 
 Build a borough-by-month panel of London house prices from the UK HPI full file,
 plus a small set of features that carry borough-level signal, plus the Bank of

@@ -1,12 +1,12 @@
 /**
- * Mortgage, tax and affordability arithmetic. OWNER: [B].
+ * Mortgage, tax and affordability arithmetic.
  *
  * These are real numbers and the room contains people who know them. Every
  * function here is pure and unit-tested in `sim.test.ts`.
  *
  * Stamp duty bands: England, residential, standard rates as at the 2025-26
  * thresholds. `netMonthly` is a deliberate approximation of PAYE + employee
- * NI — a gameplay abstraction, and D's "what's real" panel says so.
+ * NI — a gameplay abstraction, and the in-game "what's real" panel says so.
  */
 
 /** Monthly repayment. `annualPct` is the ANNUAL rate as a percent, e.g. 4.75 */

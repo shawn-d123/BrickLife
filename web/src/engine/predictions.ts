@@ -1,5 +1,5 @@
 /**
- * Adapter over `web/src/data/predictions.json`. OWNER: [B].
+ * Adapter over `web/src/data/predictions.json`.
  *
  * D writes the stub at 12:15, A overwrites it at 15:00 with the real export.
  * Nothing in here changes when that swap happens — that is the point.
@@ -70,11 +70,11 @@ export function rentIsEstimated(code: BoroughCode): boolean {
   return !(typeof r === "number" && Number.isFinite(r) && r > 0);
 }
 
-/** How many boroughs are running on an estimated rent. For D's "what's real" panel. */
+/** How many boroughs are running on an estimated rent. For the "what's real" panel. */
 export const estimatedRentCount = (): number =>
   boroughCodes().filter(rentIsEstimated).length;
 
-/** True while D's hand-written stub is in place. D's "what's real" panel reads this. */
+/** True while the hand-written stub is in place. The "what's real" panel reads this. */
 export const isStub = (): boolean => PREDICTIONS.meta?.is_stub === true;
 
 export const boroughCodes = (): BoroughCode[] => Object.keys(PREDICTIONS.boroughs ?? {});
@@ -114,8 +114,8 @@ export function scenarioLabel(scenario: ScenarioId): string {
 }
 
 // ---------- borough facts ----------
-// predictions.json is authoritative for price and rent (A supersedes D's
-// boroughs.ts at 15:00). D's file is the fallback for all three fields.
+// predictions.json is authoritative for price and rent (the model export
+// supersedes boroughs.ts). boroughs.ts is the fallback for all three fields.
 
 export interface BoroughFacts {
   code: BoroughCode;
@@ -130,7 +130,7 @@ export function boroughFacts(code: BoroughCode): BoroughFacts {
   const bp = getBorough(resolved);
   const fromD = boroughByCode(resolved);
   const avgPrice = num(bp?.avg_price, num(fromD?.avgPrice, NEUTRAL_PRICE));
-  // Rent: A's export first, then D's boroughs.ts, then estimated from price at
+  // Rent: the model's export first, then boroughs.ts, then estimated from price at
   // the mean gross yield, then a flat constant.
   const estimated = Math.round((avgPrice * MEAN_GROSS_YIELD) / 12 / 10) * 10;
   return {

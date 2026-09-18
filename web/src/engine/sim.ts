@@ -1,5 +1,5 @@
 /**
- * BrickLife simulation engine. OWNER: [B].
+ * BrickLife simulation engine.
  *
  * THE RULE THAT MATTERS MORE THAN ANYTHING ELSE:
  *
@@ -163,7 +163,7 @@ const housingMonthly = (s: YearState): number =>
 /**
  * Recompute every derived field. Wellbeing and stress are GAMEPLAY
  * ABSTRACTIONS driven off the housing cost ratio and the cash position — they
- * are not modelled quantities, and D's "what's real" panel says so.
+ * are not modelled quantities, and the in-game "what's real" panel says so.
  */
 function derive(s: YearState, path: ScenarioId[]): YearState {
   const balance = s.mortgage?.balance ?? 0;

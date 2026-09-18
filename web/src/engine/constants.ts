@@ -1,4 +1,4 @@
-/** Engine-wide constants. OWNER: [B]. */
+/** Engine-wide constants. */
 
 export const START_YEAR = 2026;
 export const FINAL_YEAR = 2030;
