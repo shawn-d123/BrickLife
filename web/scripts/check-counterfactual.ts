@@ -1,17 +1,16 @@
 // Does the "What if?" screen ever show a column identical to the played run?
 //
-// This guards C's alternates logic against the real engine. B's sim.test.ts
-// covers the engine itself; this covers the screen built on top of it.
-import { simulate, drawScenarioPath, canAfford, allBoroughs } from "../src/engine/index.ts";
+// This guards the "What if?" alternates logic against the real engine.
+// sim.test.ts covers the engine itself; this covers the screen built on top of it.
+import { simulate, drawScenarioPath } from "../src/engine/index.ts";
 import type { Decision } from "../src/engine/index.ts";
 import { buildAlternates } from "../src/game/alternates.ts";
 
-const round1k = (n: number) => Math.round(n / 1000) * 1000;
 
 /** A plausible player: refuses the rent rise, buys if the card offers it. */
 function play(seed: number, buyIfOffered: boolean) {
   const path = drawScenarioPath(seed);
-  let ds: Decision[] = [];
+  const ds: Decision[] = [];
   let run = simulate(seed, path, ds);
   let guard = 0;
   while (run.pending && guard++ < 14) {

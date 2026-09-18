@@ -1,0 +1,7 @@
+services:
+  web:
+    build:
+      context: ./web
+    ports:
+      - "4173:4173"
+    # No env_file: the app takes no configuration. See web/.env.example.

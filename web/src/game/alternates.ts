@@ -13,7 +13,7 @@
 // player made that decision, and always reaches 2030.
 import { simulate, PREDICTIONS, offerPrice, reachable as canReach } from "./wiring.ts";
 import type {
-  Circumstances, Decision, DecisionKind, GameEvent, RunState, ScenarioId, YearState,
+  Decision, DecisionKind, GameEvent, RunState, ScenarioId, YearState,
 } from "./wiring.ts";
 
 const BOROUGH_CODES = Object.keys(PREDICTIONS.boroughs);
@@ -98,7 +98,6 @@ export function buildAlternates(
   seed: number, path: ScenarioId[], decisions: Decision[], asPlayed: RunState
 ): Alternate[] {
   const answered = annotate(seed, path, decisions);
-  const circ = asPlayed.circumstances;
   const bought = decisions.find((d) => d.kind === "buy");
   const homeBorough = bought?.borough ?? asPlayed.current.borough;
 

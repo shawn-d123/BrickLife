@@ -1,7 +1,7 @@
 /**
- * The six event families. OWNER: [B].
+ * The six event families.
  *
- * Data-driven on purpose: every string comes from D's `copy.ts` with an engine
+ * Data-driven on purpose: every string comes from `content/copy.ts` with an engine
  * fallback, so D can rewrite the copy without touching this logic. Each beat
  * carries a `gate` — miss one and you get the "sell the house you do not have"
  * bug that surfaces at 17:32.
@@ -89,7 +89,6 @@ export function canAfford(state: YearState, price: number): boolean {
   return state.cash >= cashNeededToBuy(state.cash, price, true);
 }
 
-const lastDecision = (log: Decision[]): Decision | undefined => log[log.length - 1];
 
 // ---------------------------------------------------------------- beats
 

@@ -75,6 +75,11 @@ function Game() {
       { year: run.current.year, kind: c.kind, borough: c.borough, price: c.price },
     ]);
     setBeat("idle");
+    // Deliberately narrowed to the year, not the whole `run` object: `run` is
+    // rebuilt every time decisions change, which is every time this callback
+    // itself fires, so depending on it would recreate the callback on every
+    // choice for no behavioural difference.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [run.current.year]);
 
   function newLife() {

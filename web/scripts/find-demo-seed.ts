@@ -10,7 +10,7 @@ import { buildAlternates } from "../src/game/alternates.ts";
 function play(seed: number) {
   const path = drawScenarioPath(seed);
   const circ = rollCircumstances(seed);
-  let ds: Decision[] = [];
+  const ds: Decision[] = [];
   let run = simulate(seed, path, ds);
   let bought: Decision | null = null;
   let guard = 0;
@@ -38,7 +38,7 @@ function play(seed: number) {
   };
 }
 
-const hits: any[] = [];
+const hits: ReturnType<typeof play>[] = [];
 let couldBuy = 0;
 let scanned = 0;
 const SCAN = Number(process.argv[2] ?? 40_000);
