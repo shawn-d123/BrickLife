@@ -4,14 +4,20 @@ dist/
 .vite/
 *.log
 
-# python (model lane)
+# python (model pipeline)
 __pycache__/
 *.pyc
 .venv/
 venv/
 
-# os / editor
+# local tooling / editors
+.claude/
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+
+# secrets
+.env
+.env.local
+*.env
