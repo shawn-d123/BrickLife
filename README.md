@@ -1,4 +1,19 @@
-# BrickLife
+<div align="center">
+
+# BR1CKL1FE
+
+### London 2030
+
+*Nobody knows what comes next.*
+
+An interactive forecasting experiment that puts people inside London's housing data.
+
+`WINNER — GENERAL TRACK` &nbsp;·&nbsp; `WINNER — PEOPLE'S CHOICE`
+<br><sub>House London Data Hackathon, hosted by Newspeak House — 29 August 2026</sub>
+
+</div>
+
+---
 
 You're handed a life: a salary, some savings, a borough, sometimes a family behind
 you and sometimes not. Then you get five years to decide whether to rent, buy,
@@ -11,42 +26,44 @@ Most housing-affordability tools give you a mortgage calculator. This gives you
 someone else's constraints and lets the arithmetic surprise you the way it
 surprises them.
 
-Built in one day at the **House London Data Hackathon**, hosted by Newspeak
-House, 29 August 2026. It won the General track and the People's Choice vote.
+## The London Lottery
 
-## What it looks like
+*"You choose how you look. You do not choose your salary, your savings, your
+borough or your family. Those are dealt to you."*
 
-The room, mid-event — a landlord has let himself in about the tenancy:
+Every life starts the same way — pick how you look, not what you're dealt, then
+find out the hand you actually got:
+
+<p align="center">
+  <img src="docs/screenshots/02-character.png" width="49%" alt="Character creation" />
+  <img src="docs/screenshots/03-lottery.png" width="49%" alt="The London Lottery result screen" />
+</p>
+
+Then the room, mid-event. A landlord has let himself in about the tenancy:
 
 ![The room, with the landlord's decision card open](docs/screenshots/04-room.png)
 
-Every life starts the same way. Pick how you look, not what you're dealt:
-
-![Character creation](docs/screenshots/02-character.png)
-
-Then the hand you were actually dealt, which you don't get to negotiate:
-
-![The London Lottery result screen](docs/screenshots/03-lottery.png)
+> *"Sorry to knock unannounced. It's about the tenancy."* — the landlord
 
 A scenario card lands between years, narrating whatever the market just did:
 
 ![Rates stay high scenario card](docs/screenshots/05-scenario.png)
 
-If a flat comes up, you can check every borough against your own numbers before
-deciding — this is the model talking, not a guess:
+If a flat comes up, check every borough against your own numbers before deciding
+— this is the model talking, not a guess:
 
 ![The borough affordability comparison table](docs/screenshots/06-outlook.png)
 
-And at the end, the same seed and the same market, replayed against a different
-decision:
+And at the end: the same seed, the same market, replayed against a different
+decision.
 
 ![The counterfactual, same future different choice](docs/screenshots/07-counterfactual.png)
 
-Title screen, for completeness:
+> *Same future. Different choice.*
 
-![Title screen](docs/screenshots/01-title.png)
+<p align="center"><img src="docs/screenshots/01-title.png" width="70%" alt="Title screen" /></p>
 
-## How it actually works
+## What's actually happening under the floorboards
 
 Three independent pieces, wired together at the end:
 
@@ -79,7 +96,7 @@ scans the source and fails the build if it finds either. That rule is the
 entire reason the counterfactual works: "what if you'd waited" has to replay
 the *identical* market, or the comparison is meaningless.
 
-## Four decisions worth explaining
+## Four decisions a judge actually asked about
 
 **Why `simulate` had to be pure, not just tidy.** The counterfactual screen
 takes a finished life and swaps one decision, then reruns it against the same
@@ -128,7 +145,7 @@ next to the baseline they're being compared against. The interval is
 calibrated and worth trusting; the direction call is not, and the game says so
 before a judge could find it themselves.
 
-## Try it
+## Deal yourself in
 
 ```bash
 cd web
@@ -177,7 +194,7 @@ engine's tests execute under directly, with no separate test-runner
 dependency (`node src/engine/sim.test.ts` just works, because Node 24 strips
 TypeScript types itself).
 
-## What's not finished, and what it would take
+## What's still owed
 
 The fourth lane planned for this build — event copy and flavour text — was
 never staffed. What ships in `web/src/content/copy.ts` is stopgap text a
@@ -202,7 +219,7 @@ The pixel art pipeline (`tools/build_border.py`, `tools/build_room.py`,
 — regenerating the room art or border tile means running those by hand against
 the raw LimeZu tilesheets. Documented, not automated.
 
-## Who built what
+## Who's actually in this house
 
 Three of us, not the four the original plan called for.
 
@@ -237,3 +254,9 @@ web/            the game (React + TypeScript + Vite)
   src/data/     predictions.json, the model's checked-in output
 docs/           the model writeup, the original design contract, integration notes
 ```
+
+---
+
+<div align="center">
+<sub>This is one plausible future, not a forecast of destiny.</sub>
+</div>
