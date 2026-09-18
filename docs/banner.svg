@@ -1,0 +1,48 @@
+<svg width="1200" height="320" viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="brick" width="48" height="24" patternUnits="userSpaceOnUse">
+      <rect width="48" height="24" fill="#150e08"/>
+      <rect x="1" y="1" width="22" height="10" fill="#7a4a38"/>
+      <rect x="25" y="1" width="22" height="10" fill="#6e4232"/>
+      <rect x="-11" y="13" width="22" height="10" fill="#6e4232"/>
+      <rect x="13" y="13" width="22" height="10" fill="#7a4a38"/>
+      <rect x="37" y="13" width="22" height="10" fill="#6e4232"/>
+    </pattern>
+  </defs>
+
+  <!-- outer brick frame -->
+  <rect x="0" y="0" width="1200" height="320" fill="url(#brick)"/>
+
+  <!-- inner dark panel -->
+  <rect x="18" y="18" width="1164" height="284" fill="#150e08" stroke="#7a4a38" stroke-width="2"/>
+  <rect x="24" y="24" width="1152" height="272" fill="none" stroke="#4a2d20" stroke-width="1"/>
+
+  <!-- corner brackets, like the in-game frame -->
+  <g fill="#d4c8ae">
+    <rect x="16" y="16" width="10" height="10"/>
+    <rect x="1174" y="16" width="10" height="10"/>
+    <rect x="16" y="294" width="10" height="10"/>
+    <rect x="1174" y="294" width="10" height="10"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="600" y="148" text-anchor="middle"
+        font-family="'Courier New', ui-monospace, monospace" font-weight="700"
+        font-size="72" letter-spacing="10" fill="#f2e9d8">BR1CKL1FE</text>
+
+  <text x="600" y="196" text-anchor="middle"
+        font-family="'Courier New', ui-monospace, monospace" font-weight="700"
+        font-size="26" letter-spacing="14" fill="#e0a75e">LONDON 2030</text>
+
+  <text x="600" y="240" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-style="italic"
+        font-size="22" fill="#d4c8ae">Nobody knows what comes next.</text>
+
+  <!-- small pixel figures, echoing the title screen sprites -->
+  <g>
+    <rect x="150" y="250" width="14" height="14" fill="#8a6a52"/>
+    <rect x="150" y="264" width="14" height="20" fill="#5a4a68"/>
+    <rect x="1036" y="250" width="14" height="14" fill="#b08a5a"/>
+    <rect x="1036" y="264" width="14" height="20" fill="#6e4232"/>
+  </g>
+</svg>
